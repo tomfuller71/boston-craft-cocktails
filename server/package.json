@@ -14,7 +14,8 @@
     "test": "jest",
     "ci": "jest --coverage",
     "generate-secret": "./scripts/generate-secret.js",
-    "dev:e2e": "NODE_ENV=e2e PORT=8765 nodemon src/app.js"
+    "dev:e2e": "NODE_ENV=e2e PORT=8765 nodemon src/app.js",
+    "mlrl": "yarn run migrate:latest && yarn migrate:rollback && yarn migrate:latest"
   },
   "license": "UNLICENSED",
   "private": true,
