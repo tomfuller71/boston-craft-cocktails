@@ -5,6 +5,9 @@ import VenueSeeder from "./seeders/VenueSeeder.js"
 import IngredientSeeder from "./seeders/IngredientSeeder.js"
 import CocktailSeeder from "./seeders/CocktailSeeder.js"
 
+import dotenv from "dotenv"
+dotenv.config()
+
 class Seeder {
   static async seed() {
     await UserSeeder.seed()
