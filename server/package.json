@@ -14,7 +14,8 @@
     "test": "jest",
     "ci": "jest --coverage",
     "generate-secret": "./scripts/generate-secret.js",
-    "dev:e2e": "NODE_ENV=e2e PORT=8765 nodemon src/app.js"
+    "dev:e2e": "NODE_ENV=e2e PORT=8765 nodemon src/app.js",
+    "mlrl": "yarn run migrate:latest && yarn migrate:rollback && yarn migrate:latest"
   },
   "license": "UNLICENSED",
   "private": true,
@@ -55,6 +56,7 @@
     "express-handlebars": "^5.2.0",
     "knex": "^0.21.16",
     "morgan": "^1.10.0",
+    "node-fetch": "^3.2.0",
     "objection": "^2.2.11",
     "objection-unique": "^1.2.1",
     "passport": "^0.4.1",
