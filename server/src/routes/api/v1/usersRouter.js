@@ -1,20 +1,26 @@
-import express from "express";
-import passport from "passport";
-import { User } from "../../../models/index.js";
+import express from "express"
+import { ValidationError } from "objection"
+import passport from "passport"
 
-const usersRouter = new express.Router();
+import { User } from "../../../models/index.js"
+
+const usersRouter = new express.Router()
 
 usersRouter.post("/", async (req, res) => {
-  const { email, password, passwordConfirmation } = req.body;
+  const { name, email, password } = req.body
   try {
-    const persistedUser = await User.query().insertAndFetch({ email, password });
+    const persistedUser = await User.query()
+    .insertAndFetch({ name, email, password })
+
     return req.login(persistedUser, () => {
-      return res.status(201).json({ user: persistedUser });
-    });
+      return res.status(201).json({ user: persistedUser })
+    })
   } catch (error) {
-    console.log(error);
-    return res.status(422).json({ errors: error });
+    if (error instanceof ValidationError) {
+      return res.status(422).json({ errors: error.data })
+    }
+    return res.status(500).json({ errors: error })
   }
-});
+})
 
 export default usersRouter;
