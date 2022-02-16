@@ -14,16 +14,18 @@ class Ingredient extends unique(Model) {
     static get jsonSchema() {
         return {
             type: "object",
-            required: ["name", "description"],
+            required: ["name"],
             properties: {
                 name: { type: "string" },
-                description: { type: "string", maxLength: 255 },
+                description: { type: "string" },
+                type: { type: "string" },
+                imageUrl: { type: "string" },
             }
         }
     }
 
     static get relationMappings() {
-        const { Cocktail } = require("./index.js")
+        const { Cocktail, CocktailComponent } = require("./index.js")
 
         return {
             cocktails: {
@@ -37,7 +39,16 @@ class Ingredient extends unique(Model) {
                     },
                     to: "cocktail.id"
                 }
+            },
+            cocktailComponents: {
+                relation: Model.HasManyRelation,
+                modelClass: CocktailComponent,
+                join: {
+                    from: "ingredients.id",
+                    to: "cocktailComponents.ingredientId"
+                }
             }
+
         }
     }
 }

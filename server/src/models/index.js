@@ -4,5 +4,13 @@ const Venue = require("./Venue.js")
 const Cocktail = require("./Cocktail.js")
 const Ingredient = require("./Ingredient.js")
 const Review = require("./Review.js")
+const CocktailComponent = require("./CocktailComponent.js")
 
-module.exports = { User, Venue, Cocktail, Ingredient, Review };
+module.exports = {
+	User,
+	Venue,
+	Cocktail,
+	Ingredient,
+	CocktailComponent,
+	Review
+};
