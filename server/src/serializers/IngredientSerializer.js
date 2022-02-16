@@ -2,7 +2,11 @@ import allow from "./service/allow.js"
 
 class IngredientSerializer {
     static getSummary(ingredient) {
-        return allow(ingredient, ["name", "type", "imageUrl"])
+        return allow(ingredient, ["id", "name", "type", "imageUrl"])
+    }
+
+    static getDetail(ingredient) {
+        return allow(ingredient, [ "name", "type", "description", "imageUrl"])
     }
 
     static serializeCollection(ingredients) {

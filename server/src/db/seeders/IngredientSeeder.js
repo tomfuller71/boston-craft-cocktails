@@ -46,7 +46,7 @@ class IngredientSeeder {
             type = detail.strType
           }
 
-          const imageUrl = `http://www.thecocktaildb.com/images/ingredients/${apiIngredientName}-Medium.png`
+          const imageUrl = `http://www.thecocktaildb.com/images/ingredients/${ingredient.name}-Medium.png`
 
           const ingredientDetail = {
             ...ingredient,

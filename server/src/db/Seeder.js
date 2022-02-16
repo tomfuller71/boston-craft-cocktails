@@ -7,14 +7,14 @@ import CocktailSeeder from "./seeders/CocktailSeeder.js"
 
 class Seeder {
   static async seed() {
-    // await UserSeeder.seed()
-    // console.log("Seeded users!")
+    await UserSeeder.seed()
+    console.log("Seeded users!")
 
-    // await VenueSeeder.seed()
-    // console.log("Seeded venues!")
+    await VenueSeeder.seed()
+    console.log("Seeded venues!")
 
-    // await IngredientSeeder.seed()
-    // console.log("Seeded ingredients!")
+    await IngredientSeeder.seed()
+    console.log("Seeded ingredients!")
 
     await CocktailSeeder.seed()
     console.log("Seeded cocktails!")
