@@ -4,6 +4,7 @@ import UserSeeder from "./seeders/UserSeeder.js"
 import VenueSeeder from "./seeders/VenueSeeder.js"
 import IngredientSeeder from "./seeders/IngredientSeeder.js"
 import CocktailSeeder from "./seeders/CocktailSeeder.js"
+import ReviewSeeder from "./seeders/ReviewsSeeder.js"
 
 class Seeder {
   static async seed() {
@@ -18,6 +19,9 @@ class Seeder {
 
     await CocktailSeeder.seed()
     console.log("Seeded cocktails!")
+    
+    await ReviewSeeder.seed()
+    console.log("Seeded reviews!")
 
     console.log("Done!")
     await connection.destroy()
