@@ -1,4 +1,4 @@
-import { Venue, Cocktail, Review, User } from "../../models/index.js"
+import { Venue, Cocktail, User } from "../../models/index.js"
 import { readFile } from "fs/promises"
 
 class ReviewSeeder {

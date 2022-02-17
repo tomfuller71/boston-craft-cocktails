@@ -9,7 +9,7 @@ import SignInForm from "./authentication/SignInForm"
 import TopBar from "./layout/TopBar"
 import CocktailIndex from "./layout/CocktailIndex.js"
 import IngredientShow from "./layout/IngredientShow.js"
-import SignUpForm from "./registration/SignupForm.js"
+import SignUpForm from "./registration/SignUpForm.js"
 
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(null);

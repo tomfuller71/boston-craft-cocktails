@@ -1,4 +1,4 @@
-import allow from "./service/allow"
+import allow from "./service/allow.js"
 import { Review } from "../models/index.js"
 
 class ReviewSerializer {
@@ -7,12 +7,10 @@ class ReviewSerializer {
     }
 
     static async getDetail(review) {
-        const cocktail = await review.$relatedQuery("cocktail")
         const user = await review.$relatedQuery("user")
 
         return {
             ...this.getSummary(review),
-            cocktailName: cocktail.name,
             userName: user.name
         }
     }

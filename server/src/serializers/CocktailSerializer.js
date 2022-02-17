@@ -15,11 +15,16 @@ class CocktailSerializer {
         const serializedReviews = await ReviewSerializer
         .getDetailCollection(reviews)
 
+        const averageRating = (serializedReviews.reduce((total, current) => {
+            return total += current.rating
+        }, 0) / serializedReviews.length).toFixed(1)
+
         return {
             ...serializedCocktail,
             venueName: venue.name,
+            averageRating,
             ingredients: IngredientSerializer.serializeCollection(ingredients),
-            reviews: serializedReviews
+            reviews: serializedReviews,
         }
     }
 

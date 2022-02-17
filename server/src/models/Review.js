@@ -29,7 +29,7 @@ class Review extends Model {
                 modelClass: Cocktail,
                 join: {
                     from: "reviews.cocktailId",
-                    to: "cocktail.id"
+                    to: "cocktails.id"
                 }
             },
             user: {
