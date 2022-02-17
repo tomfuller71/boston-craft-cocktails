@@ -3,7 +3,7 @@ import { Review } from "../models/index.js"
 
 class ReviewSerializer {
     static getSummary(review) {
-        return allow(review, ["reviewText", "rating", "userId"])
+        return allow(review, ["id", "reviewText", "rating", "userId"])
     }
 
     static async getDetail(review) {

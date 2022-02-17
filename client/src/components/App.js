@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 import { hot } from "react-hot-loader/root"
 
 import getCurrentUser from "../services/getCurrentUser"
@@ -28,17 +28,28 @@ const App = (props) => {
 
   return (
     <Router>
-      <TopBar user={currentUser} />
-          <div className="grid-container">
-        <Switch>
-            <Route exact path="/">
-              <h2>Boston Craft Cocktails</h2>
-            </Route>
-            <Route exact path="/users/new" component={SignUpForm} />
-            <Route exact path="/user-sessions/new" component={SignInForm} />
-            <Route exact path="/ingredients/:id" component={IngredientShow} />
-            <Route exact path="/cocktails" component={CocktailIndex} />
-        </Switch>
+          <div className="grid-container fluid">
+            <div className="grid-y medium-grid-frame">
+              <div className="cell shrink header medium-cell-block-container">
+                <TopBar user={currentUser} />
+              </div>
+              <div className="cell medium-auto medium-cell-block-container">
+                <div className="cell medium-4 medium-cell-block-y">
+                  <Switch>
+                      <Route exact path="/">
+                        <h2>Boston Craft Cocktails</h2>
+                        <Link to="/cocktails">See cocktails</Link>
+                      </Route>
+                      <Route exact path="/users/new" component={SignUpForm} />
+                      <Route exact path="/user-sessions/new" component={SignInForm} />
+                      <Route exact path="/ingredients/:id" component={IngredientShow} />
+                      <Route exact path="/cocktails">
+                        <CocktailIndex user={currentUser} />
+                      </Route> 
+                  </Switch>
+                </div>
+              </div>
+            </div>
           </div>
     </Router>
   );

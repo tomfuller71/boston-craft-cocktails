@@ -30,6 +30,6 @@ cocktailsRouter.get("/:id", async (req, res) => {
     }
 })
 
-cocktailsRouter.use("/:id/review", cocktailReviewsRouter)
+cocktailsRouter.use("/:id/reviews", cocktailReviewsRouter)
 
 export default cocktailsRouter
