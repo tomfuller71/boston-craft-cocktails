@@ -5,7 +5,7 @@ import config from "../../config"
 import FormError from "../layout/FormError.js"
 import Fetcher from "../../services/Fetcher.js"
 
-const SignInForm = () => {
+const SignInForm = (props) => {
   const [userPayload, setUserPayload] = useState({ email: "", password: "" })
   const [shouldRedirect, setShouldRedirect] = useState(false)
   const [errors, setErrors] = useState({})
@@ -45,7 +45,7 @@ const SignInForm = () => {
   }
 
   if (shouldRedirect) {
-    location.href = "/"
+    location.href = props.location.state?.referrer ?? "/"
   }
 
   return (

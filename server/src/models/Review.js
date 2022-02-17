@@ -13,9 +13,9 @@ class Review extends Model {
             required: ["reviewText", "rating"],
             properties: {
                 reviewText: { type: "string" },
-                rating: { type: "integer", maximum: 10 },
-                cocktailId: { type: "integer"},
-                userId: { type: "integer" }
+                rating: { type: "integer", maximum: 5 },
+                cocktailId: { type: ["integer", "string"]},
+                userId: { type: ["integer", "string"] }
             }
         }
     }

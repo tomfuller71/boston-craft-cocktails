@@ -4,7 +4,7 @@ import CocktailTile from "./CocktailTile.js"
 import Fetcher from "../../services/Fetcher.js"
 
 
-const CocktailIndex = (props) => {
+const CocktailIndex = ({ user }) => {
     const [cocktails, setCocktails] = useState([])
 
     const getCocktails = async () => {
@@ -17,7 +17,7 @@ const CocktailIndex = (props) => {
     useEffect(() => { getCocktails() }, [])
 
     const cocktailList = cocktails.map((cocktail) => {
-        return <CocktailTile key={cocktail.id} {...cocktail} />
+        return <CocktailTile key={cocktail.id} user={user} {...cocktail} />
     })
 
     return (

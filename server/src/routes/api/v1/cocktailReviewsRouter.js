@@ -8,24 +8,31 @@ import cleanUserInput from "../../services/cleanUserInput.js"
 const cocktailReviewsRouter = new express.Router({ mergeParams: true })
 
 cocktailReviewsRouter.post("/", async (req, res) => {
-  const { id } = req.params
-  const reviewData = {
-    ...cleanUserInput(req.body),
-    userId: req.user.id,
-    cocktailId: id,
-  }
-
   try {
-    const cocktail = await Cocktail.query().findById(id)
-    const review = await cocktail.$relatedQuery("reviews").insertAndFetch(reviewData)
+    if (!req.user) {
+      throw new Error("No user signed in")
+    }
+
+    const reviewData = {
+      ...cleanUserInput(req.body),
+      userId: req.user.id,
+      cocktailId: req.params.id,
+    }
+
+    const cocktail = await Cocktail.query().findById(reviewData.cocktailId)
+
+    const review = await cocktail
+    .$relatedQuery("reviews")
+    .insertAndFetch(reviewData)
 
     const serializedReview = await ReviewSerializer.getDetail(review)
 
-    res.status(200).json({ review: serializedReview })
+    res.status(201).json({ review: serializedReview })
   } catch (error) {
     if (error instanceof ValidationError) {
       return res.status(422).json({ errors: error.data })
     } else {
+      console.log(error)
       return res.status(500).json({ errors: error })
     }
   }
