@@ -4,7 +4,9 @@ import { ValidationError } from "objection"
 import { Cocktail, Venue } from "../../../models/index.js"
 import CocktailSerializer from "../../../serializers/CocktailSerializer.js"
 import cocktailReviewsRouter from "./cocktailReviewsRouter.js"
-import cleanUserInput from "../../services/cleanUserInput.js"
+import cleanUserInput from "../../../services/cleanUserInput.js"
+
+import uploadImage from "../../../services/uploadImage.js"
 
 const cocktailsRouter = new express.Router()
 
@@ -29,14 +31,21 @@ cocktailsRouter.get("/", async (req, res) => {
   }
 })
 
-cocktailsRouter.post("/", async (req, res) => {
+cocktailsRouter.post("/", uploadImage.single("image"), async (req, res) => {
   try {
     if (!req.user) {
       throw new Error("User is not logged in.")
     }
-    const formData = cleanUserInput(req.body)
+
+    const { body, file } = req
+
+    const formData =  {
+      ...cleanUserInput(body),
+      image: file ? file.location : null
+    }
+
     const cocktail = await Cocktail.query().insertAndFetch(formData)
-    const serialized = await CocktailSerializer.gerDetail(cocktail)
+    const serialized = CocktailSerializer.getSummary(cocktail)
 
     res.status(201).json({ cocktail: serialized })
   } catch (error) {

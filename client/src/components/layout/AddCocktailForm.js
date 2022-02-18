@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { Redirect } from "react-router-dom"
 
 const AddCocktailForm = ({ userId, venueId }) => {
   const defaultInput = { userId, venueId, name: "", image: {} }
@@ -12,15 +13,15 @@ const AddCocktailForm = ({ userId, venueId }) => {
     setFormInput({ ...formInput, [name]: value })
   }
 
-  const handleImageUpload = (acceptedFiles) => {
-    setFileName(acceptedFiles[0].name)
-    setFormInput({ ...formInput, image: acceptedFiles[0] })
+  const handleImageUpload = (acceptedImage) => {
+    setFileName(acceptedImage[0].name)
+    setFormInput({ ...formInput, image: acceptedImage[0] })
   }
 
   const addCocktail = async () => {
-    const form = new FormData()
+    const formData = new FormData()
     for (const key of Object.keys(formInput)) {
-      from.append(key, formInput[key])
+      formData.append(key, formInput[key])
     }
 
     try {
@@ -57,6 +58,10 @@ const AddCocktailForm = ({ userId, venueId }) => {
     setFormInput(defaultInput)
   }
 
+  if (shouldRedirect) {
+    return <Redirect push to={`/cocktails/?venueId=${venueId}`} />
+  }
+
   return (
     <div className="cocktail-add-form">
       <h1>Add a New Dog</h1>
@@ -66,10 +71,12 @@ const AddCocktailForm = ({ userId, venueId }) => {
       <form onSubmit={handleSubmit}>
         <Dropzone onDrop={handleImageUpload}>
           {({ getRootProps, getInputProps }) => (
-            <div className="drop-zone" {...getRootProps()}>
-              <input {...getInputProps()} />
-              <p>Drag and drop your cocktail image, or click to upload</p>
-            </div>
+            <section>
+              <div className="drop-zone" {...getRootProps()}>
+                <input {...getInputProps()} />
+                <p>Drag and drop your cocktail image, or click to upload</p>
+              </div>
+            </section>
           )}
         </Dropzone>
         <h5 className="cocktail-file-name">{fileName}</h5>

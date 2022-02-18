@@ -12,12 +12,12 @@ import SignUpForm from "./registration/SignUpForm.js"
 import VenueIndex from "./layout/VenueIndex.js"
 
 const App = (props) => {
-  const [currentUser, setCurrentUser] = useState(null);
+	const [currentUser, setCurrentUser] = useState(null)
   const fetchCurrentUser = async () => {
     try {
       const user = await getCurrentUser()
       setCurrentUser(user)
-    } catch(err) {
+    } catch (err) {
       setCurrentUser(null)
     }
   }
@@ -28,45 +28,39 @@ const App = (props) => {
 
   return (
     <Router>
-          <div className="grid-container fluid">
-            <div className="grid-y medium-grid-frame">
-              <div className="cell shrink header medium-cell-block-container">
-                <TopBar user={currentUser} />
-              </div>
-              <div className="cell medium-auto medium-cell-block-container">
-                <div className="cell medium-4 medium-cell-block-y">
-                  <Switch>
-                      <Route exact path="/">
-                        <VenueIndex user={currentUser} />
-                      </Route>
+      <div className="grid-container fluid">
+        <div className="grid-y medium-grid-frame">
+          <div className="cell shrink header medium-cell-block-container">
+            <TopBar user={currentUser} />
+          </div>
+          <div className="cell medium-auto medium-cell-block-container">
+            <div className="cell medium-4 medium-cell-block-y">
+              <Switch>
+                <Route exact path="/">
+                  <VenueIndex user={currentUser} />
+                </Route>
 
-                      <Route exact path="/users/new" component={SignUpForm} />
+                <Route exact path="/users/new" component={SignUpForm} />
 
-                      <Route
-                        exact path="/user-sessions/new"
-                        component={SignInForm}
-                      />
+                <Route exact path="/user-sessions/new" component={SignInForm} />
 
-                      <Route 
-                        exact path="/ingredients/:id" 
-                        component={IngredientShow}
-                      />
+                <Route exact path="/ingredients/:id" component={IngredientShow}
+								/>
 
-                      <Route exact path="/cocktails/:venueId">
-                        <CocktailIndex user={currentUser} />
-                      </Route>
+                <Route exact path="/cocktails/:venueId">
+                  <CocktailIndex user={currentUser} />
+                </Route>
 
-                      <Route exact path="/cocktails">
-                        <CocktailIndex user={currentUser} />
-                      </Route>
-
-                  </Switch>
-                </div>
-              </div>
+                <Route exact path="/cocktails">
+                  <CocktailIndex user={currentUser} />
+                </Route>
+              </Switch>
             </div>
           </div>
+        </div>
+      </div>
     </Router>
-  );
+  )
 };
 
 export default hot(App);
