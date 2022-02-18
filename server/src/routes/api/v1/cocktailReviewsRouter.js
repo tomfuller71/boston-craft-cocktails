@@ -3,7 +3,7 @@ import { ValidationError } from "objection"
 
 import { Cocktail } from "../../../models/index.js"
 import ReviewSerializer from "../../../serializers/ReviewSerializer.js"
-import cleanUserInput from "../../services/cleanUserInput.js"
+import cleanUserInput from "../../../services/cleanUserInput.js"
 
 const cocktailReviewsRouter = new express.Router({ mergeParams: true })
 

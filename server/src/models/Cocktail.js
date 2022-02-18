@@ -1,4 +1,3 @@
-const { HasManyRelation } = require("./Model")
 const Model = require("./Model")
 
 const unique = require("objection-unique")({
@@ -18,14 +17,15 @@ class Cocktail extends unique(Model) {
       properties: {
         name: { type: "string" },
         description: { type: "string", maxLength: 255 },
-        venueId: { type: "integer" },
+        venueId: { type: ["integer", "string"] },
         image: { type: "string " },
+        userId: {type: ["integer", "string"] }
       },
     }
   }
 
   static get relationMappings() {
-    const { Venue, Ingredient, CocktailComponent, Review } = require("./index.js")
+    const { Venue, Ingredient, CocktailComponent, Review, User } = require("./index.js")
 
     return {
       venue: {
@@ -57,13 +57,21 @@ class Cocktail extends unique(Model) {
         },
       },
       cocktailComponents: {
-        relation: HasManyRelation,
+        relation: Model.HasManyRelation,
         modelClass: CocktailComponent,
         join: {
           from: "cocktails.id",
           to: "cocktailComponents.cocktailId",
         },
       },
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: "cocktails.userId",
+          to: "users.id"
+        }
+      }
     }
   }
 }

@@ -2,8 +2,6 @@ import _ from "lodash"
 
 import translateServerErrors from "./translateServerErrors.js"
 
-
-
 /**
  * A helper class for fetch api:
  * - static method `.get`
@@ -22,15 +20,19 @@ class Fetcher {
    * - `data`: the post response body
    * - `validationErrors`: the parsed json validation errors
    */
-  static async post(route, body, options = {}) {
-
-    const validationStatus = options.validationStatus ?? 422
-    const validationErrorParser = options.validationErrorParser ?? translateServerErrors
+  static async post(
+    route,
+    body,
+    { 
+      validationStatus = 422,
+      validationErrorParser = translateServerErrors,
+      contentType = "json"
+    } = {} ) {
 
     const response = {
       ok: false,
       data: null,
-      validationErrors: null,
+      validationErrors: {},
     }
 
     try {
@@ -54,10 +56,11 @@ class Fetcher {
         response.ok = true
         response.data = await fetchResponse.json()
       }
-      return response
     } catch (err) {
       console.error(`Error in fetch: ${err.message}`)
     }
+
+    return response
   }
   /**
    *
@@ -67,11 +70,7 @@ class Fetcher {
    * - `data`: the post response body
    */
   static async get(route) {
-
-    const response = {
-      ok: false,
-      data: null,
-    }
+    const response = { ok: false,  data: null }
 
     try {
       const fetchResponse = await fetch(route)
@@ -82,12 +81,11 @@ class Fetcher {
       } else {
         throw Error(`${fetchResponse.status} (${fetchResponse.statusText})`)
       }
-
-      return response
-
     } catch (err) {
       console.error(`Error in fetch: ${err.message}`)
     }
+
+    return response
   }
 
     // Alt version of error parser that doesn't mutate key case - may then use for <input> specific errors rather than have all in callout in one block
