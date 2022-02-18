@@ -4,12 +4,12 @@ import { hot } from "react-hot-loader/root"
 
 import getCurrentUser from "../services/getCurrentUser"
 import "../assets/scss/main.scss"
-import RegistrationForm from "./registration/RegistrationForm"
 import SignInForm from "./authentication/SignInForm"
 import TopBar from "./layout/TopBar"
 import CocktailIndex from "./layout/CocktailIndex.js"
 import IngredientShow from "./layout/IngredientShow.js"
 import SignUpForm from "./registration/SignUpForm.js"
+import VenueIndex from "./layout/VenueIndex.js"
 
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -37,15 +37,29 @@ const App = (props) => {
                 <div className="cell medium-4 medium-cell-block-y">
                   <Switch>
                       <Route exact path="/">
-                        <h2>Boston Craft Cocktails</h2>
-                        <Link to="/cocktails">See cocktails</Link>
+                        <VenueIndex user={currentUser} />
                       </Route>
+
                       <Route exact path="/users/new" component={SignUpForm} />
-                      <Route exact path="/user-sessions/new" component={SignInForm} />
-                      <Route exact path="/ingredients/:id" component={IngredientShow} />
+
+                      <Route
+                        exact path="/user-sessions/new"
+                        component={SignInForm}
+                      />
+
+                      <Route 
+                        exact path="/ingredients/:id" 
+                        component={IngredientShow}
+                      />
+
+                      <Route exact path="/cocktails/:venueId">
+                        <CocktailIndex user={currentUser} />
+                      </Route>
+
                       <Route exact path="/cocktails">
                         <CocktailIndex user={currentUser} />
-                      </Route> 
+                      </Route>
+
                   </Switch>
                 </div>
               </div>

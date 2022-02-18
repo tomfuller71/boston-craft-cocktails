@@ -1,4 +1,3 @@
-const { modelPaths } = require("./Model")
 const Model = require("./Model")
 
 class CocktailComponent extends Model {

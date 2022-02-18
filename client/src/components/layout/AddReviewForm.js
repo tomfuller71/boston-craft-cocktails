@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 
-const AddReviewForm = ({ addReview }) => {
+import ErrorList from "./ErrorList.js"
+
+const AddReviewForm = ({ addReview, errors }) => {
   const defaultInput = {
     reviewText: "",
     rating: ""
@@ -53,6 +55,7 @@ const AddReviewForm = ({ addReview }) => {
         </label>
         <input className="button" type="submit" value="Submit" />
       </form>
+      <ErrorList errors={errors} />
     </div>
   )
 }
