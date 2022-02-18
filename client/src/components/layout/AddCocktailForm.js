@@ -1,8 +1,16 @@
 import React, { useState } from "react"
-import { Redirect } from "react-router-dom"
+import { Redirect, withRouter } from "react-router-dom"
+import Dropzone from "react-dropzone"
 
-const AddCocktailForm = ({ userId, venueId }) => {
+import ErrorList from "./ErrorList.js"
+import translateServerErrors from "../../services/translateServerErrors.js"
+
+const AddCocktailForm = ({ user, match }) => {
+  const venueId = match.params.venueId
+  const userId = user.id
+
   const defaultInput = { userId, venueId, name: "", image: {} }
+
   const [formInput, setFormInput] = useState(defaultInput)
   const [errors, setErrors] = useState([])
   const [shouldRedirect, setShouldRedirect] = useState(false)
@@ -30,8 +38,9 @@ const AddCocktailForm = ({ userId, venueId }) => {
         headers: {
           Accept: "image/jpeg",
         },
-        body: newDogBody,
+        body: formData
       })
+
       if (!response.ok) {
         if (response.status === 422) {
           const body = await response.json()
@@ -41,7 +50,6 @@ const AddCocktailForm = ({ userId, venueId }) => {
           throw new Error(`${response.status} (${response.statusText})`)
         }
       }
-      const body = await response.json()
       setShouldRedirect(true)
     } catch (error) {
       console.error(`Error in Fetch: ${error.message}`)
@@ -64,7 +72,7 @@ const AddCocktailForm = ({ userId, venueId }) => {
 
   return (
     <div className="cocktail-add-form">
-      <h1>Add a New Dog</h1>
+      <h1>Add a New Cocktail</h1>
 
       <ErrorList errors={errors} />
 
@@ -93,4 +101,4 @@ const AddCocktailForm = ({ userId, venueId }) => {
   )
 }
 
-export default AddReviewForm
+export default withRouter(AddCocktailForm)

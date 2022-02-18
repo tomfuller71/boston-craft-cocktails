@@ -43,6 +43,7 @@ cocktailsRouter.post("/", uploadImage.single("image"), async (req, res) => {
       ...cleanUserInput(body),
       image: file ? file.location : null
     }
+    console.log(formData)
 
     const cocktail = await Cocktail.query().insertAndFetch(formData)
     const serialized = CocktailSerializer.getSummary(cocktail)

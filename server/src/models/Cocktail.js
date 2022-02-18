@@ -17,8 +17,9 @@ class Cocktail extends unique(Model) {
       properties: {
         name: { type: "string" },
         description: { type: "string", maxLength: 255 },
-        venueId: { type: "integer" },
+        venueId: { type: ["integer", "string"] },
         image: { type: "string " },
+        userId: {type: ["integer", "string"] }
       },
     }
   }

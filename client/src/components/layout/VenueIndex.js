@@ -19,18 +19,25 @@ const VenueIndex = (props) => {
 
   const venueList = venues.map((venue) => {
     return (
-      <li  key={venue.id}>
-        <Link to={`/cocktails/?venueId=${venue.id}&offset=0&limit=10`} >
-          {venue.name}
-        </Link>
-      </li>
+      <div key={venue.id} className="venue-tile grid-x grid-margin-x">
+        <div className="cell medium-8">
+          <Link to={`/cocktails/?venueId=${venue.id}&offset=0&limit=10`} >
+            {venue.name}
+          </Link>
+        </div>
+        <div className="cell medium-2">
+          <Link to={`/venues/${venue.id}/addCocktail`} >
+            Add Cocktail
+          </Link>
+        </div>
+      </div>
     )
   })
 
   return (
     <div className="venues-list">
       <h1>Venues</h1>
-      <ul>{venueList}</ul>
+      {venueList}
     </div>
   )
 }
