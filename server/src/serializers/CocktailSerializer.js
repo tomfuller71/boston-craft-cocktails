@@ -7,6 +7,12 @@ class CocktailSerializer {
         return allow(cocktail, ["id", "name", "description", "image", "venueId"])
     }
 
+    static getAverageRating(reviews) {
+        return (reviews.reduce((total, current) => {
+            return total += current.rating
+        }, 0) / reviews.length).toFixed(1)
+    }
+
     static async getDetail(cocktail) {
         const serializedCocktail = this.getSummary(cocktail)
         const ingredients = await cocktail.$relatedQuery("ingredients")
@@ -15,9 +21,7 @@ class CocktailSerializer {
         const serializedReviews = await ReviewSerializer
         .getDetailCollection(reviews)
 
-        const averageRating = (serializedReviews.reduce((total, current) => {
-            return total += current.rating
-        }, 0) / serializedReviews.length).toFixed(1)
+        const averageRating = this.getAverageRating(serializedReviews)
 
         return {
             ...serializedCocktail,

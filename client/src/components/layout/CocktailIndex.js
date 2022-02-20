@@ -13,10 +13,14 @@ const CocktailIndex = ({ user, location }) => {
   }, [searchParams])
 
   const cocktailList = cocktails.map((cocktail) => {
-    return <CocktailTile key={cocktail.id} user={user} {...cocktail} />
+    return <CocktailTile id={cocktail.id} key={cocktail.id} user={user} {...cocktail} />
   })
 
-  return <div className="cocktail-index">{cocktailList}</div>
+  return (
+    <div className="cocktail-index">
+      {cocktailList}
+    </div>
+  )
 
   async function getCocktails() {
     const response = await Fetcher.get(getRoute())

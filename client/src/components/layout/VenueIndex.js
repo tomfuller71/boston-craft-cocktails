@@ -21,7 +21,10 @@ const VenueIndex = (props) => {
     return (
       <div key={venue.id} className="venue-tile grid-x grid-margin-x">
         <div className="cell medium-8">
-          <Link to={`/cocktails/?venueId=${venue.id}&offset=0&limit=10`} >
+          <Link to={{
+            pathname: "/cocktails",
+            search: `?venueId=${venue.id}`
+          }}>
             {venue.name}
           </Link>
         </div>
