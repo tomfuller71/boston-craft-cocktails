@@ -37,6 +37,12 @@
   overflow-y: scroll;
 }
 
+.venue-map-icon svg {
+  font-size: 1.5rem;
+  color: gold
+}
+
+
 @media (min-width: 640px) {
   .cocktail-tile {
     max-height: 500px;
@@ -45,5 +51,4 @@
   .cocktail-image img {
     max-height: 375px;
   }
-
 }
