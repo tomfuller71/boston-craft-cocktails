@@ -6,6 +6,7 @@ const development = {
   awsAccess: { key: process.env.AWS_ACCESS_KEY },
   awsSecret: { key: process.env.AWS_SECRET_KEY },
   s3Bucket: { name: process.env.S3_BUCKET_DEVELOPMENT },
+  yelpAPI: { key: process.env.YELP_FUSION_API_KEY },
   databaseUrl: getDatabaseUrl(getNodeEnv()),
   nodeEnv: getNodeEnv(),
   session: { secret: process.env.SESSION_SECRET },

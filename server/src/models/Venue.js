@@ -16,7 +16,9 @@ class Venue extends unique(Model) {
             type: "object",
             required: ["name"],
             properties: {
-                name: {type: "string"}
+                name: {type: "string"},
+                lat: {type: ["number", "string"]},
+                lng: {type: ["number", "string"]},
             }
         }
     }

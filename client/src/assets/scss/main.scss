@@ -1,7 +1,10 @@
 @import "./foundation/settings";
 @import "~foundation-sites/scss/foundation";
 @include foundation-everything;
-// place global css here
+
+@import "./venues.scss";
+
+
 *,
 *::before,
 *::after {
@@ -37,6 +40,7 @@
   overflow-y: scroll;
 }
 
+
 @media (min-width: 640px) {
   .cocktail-tile {
     max-height: 500px;
@@ -45,5 +49,4 @@
   .cocktail-image img {
     max-height: 375px;
   }
-
 }
