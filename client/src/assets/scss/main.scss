@@ -1,7 +1,10 @@
 @import "./foundation/settings";
 @import "~foundation-sites/scss/foundation";
 @include foundation-everything;
-// place global css here
+
+@import "./venues.scss";
+
+
 *,
 *::before,
 *::after {
@@ -35,11 +38,6 @@
   max-height: 375px;
   overflow: hidden;
   overflow-y: scroll;
-}
-
-.venue-map-icon svg {
-  font-size: 1.5rem;
-  color: gold
 }
 
 

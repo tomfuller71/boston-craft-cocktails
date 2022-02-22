@@ -9,10 +9,10 @@ import TopBar from "./layout/TopBar"
 import CocktailIndex from "./layout/CocktailIndex.js"
 import IngredientShow from "./layout/IngredientShow.js"
 import SignUpForm from "./registration/SignUpForm.js"
-import VenueIndex from "./layout/VenueIndex.js"
+import VenueIndex from "./layout/venues/VenueIndex.js"
 import AddCocktailForm from "./layout/AddCocktailForm.js"
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute.js"
-import VenueMap from "./layout/VenueMap.js"
+import VenueMap from "./layout/venues/VenueMap.js"
 
 const App = (props) => {
 	const [currentUser, setCurrentUser] = useState(null)
@@ -63,8 +63,6 @@ const App = (props) => {
                   component={AddCocktailForm}
                   user={currentUser}
                 />
-
-                <Route exact path="/map" component={VenueMap}/>
               </Switch>
             </div>
           </div>

@@ -8,9 +8,11 @@ class CocktailSerializer {
     }
 
     static getAverageRating(reviews) {
+        if (reviews.length === 0) return null
+
         return (reviews.reduce((total, current) => {
             return total += current.rating
-        }, 0) / reviews.length).toFixed(1)
+        }, 0) / reviews.length)
     }
 
     static async getDetail(cocktail) {
@@ -21,12 +23,10 @@ class CocktailSerializer {
         const serializedReviews = await ReviewSerializer
         .getDetailCollection(reviews)
 
-        const averageRating = this.getAverageRating(serializedReviews)
-
         return {
             ...serializedCocktail,
             venueName: venue.name,
-            averageRating,
+            averageRating: this.getAverageRating(serializedReviews),
             ingredients: IngredientSerializer.serializeCollection(ingredients),
             reviews: serializedReviews,
         }
