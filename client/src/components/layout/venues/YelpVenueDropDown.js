@@ -48,16 +48,16 @@ const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
     <>
       <ErrorList errors={errors} />
       <form onSubmit={handleSubmit}>
-      <label>
-        <select value={selectedId} onChange={handleSelect}>
-          <option key="emptyValue" value={""}>
-            Select from nearby places
-          </option>
-          {options}
-        </select>
-      </label>
-      <input className = "button" type="submit" value="Submit" />
-    </form>
+        <label>
+          <select value={selectedId} onChange={handleSelect}>
+            <option key="emptyValue" value={""}>
+              Select from nearby places
+            </option>
+            {options}
+          </select>
+        </label>
+        <input className = "button" type="submit" value="Submit" />
+      </form>
     </>
   )
 }

@@ -49,7 +49,7 @@ const CocktailTile = (props) => {
         />
       )
     }
-    debugger
+
     return (
       <div className="cocktail-tile callout cell">
         <div className="cocktail-header grid-x grid-margin-x">

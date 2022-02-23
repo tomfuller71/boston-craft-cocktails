@@ -5,6 +5,17 @@ import { Ingredient } from "../../../models/index.js"
 
 const ingredientsRouter = new express.Router()
 
+ingredientsRouter.get("/",  async (req, res) => {
+    try {
+        const ingredientsData = await Ingredient.query()
+        const ingredients = IngredientSerializer.serializeCollection(ingredientsData)
+
+        res.status(200).json({ ingredients })
+    } catch (error) {
+        res.status(500).json({errors: error})
+    }
+})
+
 ingredientsRouter.get("/:id", async (req, res) => {
     const { id } = req.params
     try {
@@ -16,6 +27,5 @@ ingredientsRouter.get("/:id", async (req, res) => {
         res.status(500).json({errors: error})
     }
 })
-
 
 export default ingredientsRouter

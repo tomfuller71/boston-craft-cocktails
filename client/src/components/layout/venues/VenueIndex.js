@@ -32,7 +32,6 @@ const VenueIndex = ({ user }) => {
     const { lat, lng } = venue
     const { nw , se } = venueMap.bounds
 
-    debugger
     const inLat = lat < nw.lat && lat > se.lat
     const inLng = lng > nw.lng && lng < se.lng
 

@@ -1,7 +1,7 @@
 import express from "express"
 import { ValidationError } from "objection"
 
-import { Cocktail, Venue } from "../../../models/index.js"
+import { Cocktail, Venue, CocktailComponent } from "../../../models/index.js"
 import CocktailSerializer from "../../../serializers/CocktailSerializer.js"
 import cocktailReviewsRouter from "./cocktailReviewsRouter.js"
 import cleanUserInput from "../../../services/cleanUserInput.js"
@@ -53,13 +53,29 @@ cocktailsRouter.post("/", uploadImage.single("image"), async (req, res) => {
 
     const { body, file } = req
 
+    const { ingredientIds } = body
+
     const formData =  {
       ...cleanUserInput(body),
       image: file ? file.location : null
     }
+
     console.log(formData)
+    
+    if (ingredientIds) {
+      delete formData.ingredientIds
+    }
 
     const cocktail = await Cocktail.query().insertAndFetch(formData)
+
+    if(ingredientIds && cocktail) {
+      const ingredientArray = ingredientIds.split(",")
+      for (const id of ingredientArray) {
+        await CocktailComponent.query()
+        .insert({cocktailId: cocktail.id, ingredientId: id })
+      }
+    }
+
     const serialized = CocktailSerializer.getSummary(cocktail)
 
     res.status(201).json({ cocktail: serialized })
