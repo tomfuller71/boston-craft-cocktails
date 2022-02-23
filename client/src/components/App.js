@@ -13,6 +13,7 @@ import VenueIndex from "./layout/venues/VenueIndex.js"
 import AddCocktailForm from "./layout/AddCocktailForm.js"
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute.js"
 import VenueMap from "./layout/venues/VenueMap.js"
+import CocktailShow from "./layout/CocktailShow.js"
 
 const App = (props) => {
 	const [currentUser, setCurrentUser] = useState(null)
@@ -50,8 +51,12 @@ const App = (props) => {
                 <Route exact path="/ingredients/:id" component={IngredientShow}
 								/>
 
-                <Route exact path="/cocktails/:venueId">
+                <Route exact path="/venues/cocktails/">
                   <CocktailIndex user={currentUser} />
+                </Route>
+
+                <Route exact path="/cocktails/:id">
+                  <CocktailShow user={currentUser} />
                 </Route>
 
                 <Route exact path="/cocktails">

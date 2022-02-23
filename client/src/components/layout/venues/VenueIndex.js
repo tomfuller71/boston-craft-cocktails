@@ -5,13 +5,11 @@ import VenueMap from "./VenueMap.js"
 import VenueContainer from "./VenueContainer.js"
 import YelpVenueDropDown from "./YelpVenueDropDown.js"
 
-const VenueIndex = (props) => {
+const VenueIndex = ({ user }) => {
   const [venues, setVenues] = useState([])
   const [venueMap, setVenueMap] = useState(getMapDefaults())
   const [selectedVenue, setSelectedVenue] = useState(null)
   const [yelpVenues, setYelpVenues] = useState([])
-
-  const [selectedYelpVenue, setSelectedYelpVenue] = useState(null)
 
   const getVenues = async () => {
     const response = await Fetcher.get("/api/v1/venues",)
@@ -30,10 +28,25 @@ const VenueIndex = (props) => {
     }
   }
 
-  const updateYelpVenue =(yelpVenue) => {
-    if (yelpVenue !== selectedYelpVenue) {
-      setSelectedYelpVenue(yelpVenue)
-    }
+  const inBounds = (venue) => {
+    const { lat, lng } = venue
+    const { nw , se } = venueMap.bounds
+
+    debugger
+    const inLat = lat < nw.lat && lat > se.lat
+    const inLng = lng > nw.lng && lng < se.lng
+
+    return inLat && inLng
+  }
+
+  const filterVenuesByMapBounds = () => {
+    if (venues.length === 0) return []
+    const filtered =  venues.filter(inBounds)
+    return filtered
+  }
+
+  const addNewVenue =(newVenue) => {
+    setVenues([...venues, newVenue])
   }
 
   const updateMap = (newMap) => {
@@ -68,14 +81,15 @@ const VenueIndex = (props) => {
             <div className="cell callout">
               <h5>Add new cocktail place</h5>
               <YelpVenueDropDown
+                user={user}
                 yelpVenues={yelpVenues}
-                updateYelpVenue={updateYelpVenue}
+                addNewVenue={addNewVenue}
               />
             </div>
           </div>
         </div>
         <div className="cell medium-5 callout">
-          <VenueContainer venues={venues} />
+          <VenueContainer venues={filterVenuesByMapBounds()} />
         </div>
       </div>
     </div>

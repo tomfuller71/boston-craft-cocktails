@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Redirect, withRouter } from "react-router-dom"
-import Dropzone from "react-dropzone"
 
 import ErrorList from "./ErrorList.js"
 import translateServerErrors from "../../services/translateServerErrors.js"
+import DropAndPreviewImage from "./DropAndPreviewImage.js"
 
 const AddCocktailForm = ({ user, match }) => {
   const venueId = match.params.venueId
@@ -14,16 +14,18 @@ const AddCocktailForm = ({ user, match }) => {
   const [formInput, setFormInput] = useState(defaultInput)
   const [errors, setErrors] = useState([])
   const [shouldRedirect, setShouldRedirect] = useState(false)
-  const [fileName, setFileName] = useState("")
+  const [previewURL, setPreviewURL] = useState(null)
 
   const handleInput = (event) => {
     const { name, value } = event.currentTarget
     setFormInput({ ...formInput, [name]: value })
   }
 
-  const handleImageUpload = (acceptedImage) => {
-    setFileName(acceptedImage[0].name)
-    setFormInput({ ...formInput, image: acceptedImage[0] })
+  const handleImageUpload = (acceptedFiles) => {
+    const image = acceptedFiles[0]
+    const previewURL = URL.createObjectURL(image)
+    setPreviewURL(previewURL)
+    setFormInput({ ...formInput, image })
   }
 
   const addCocktail = async () => {
@@ -64,6 +66,7 @@ const AddCocktailForm = ({ user, match }) => {
   const clearForm = (event) => {
     event.preventDefault()
     setFormInput(defaultInput)
+    setPreviewURL(null)
   }
 
   if (shouldRedirect) {
@@ -77,17 +80,11 @@ const AddCocktailForm = ({ user, match }) => {
       <ErrorList errors={errors} />
 
       <form onSubmit={handleSubmit}>
-        <Dropzone onDrop={handleImageUpload}>
-          {({ getRootProps, getInputProps }) => (
-            <section>
-              <div className="drop-zone" {...getRootProps()}>
-                <input {...getInputProps()} />
-                <p>Drag and drop your cocktail image, or click to upload</p>
-              </div>
-            </section>
-          )}
-        </Dropzone>
-        <h5 className="cocktail-file-name">{fileName}</h5>
+        <DropAndPreviewImage
+          previewURL={previewURL}
+          handleDrop={handleImageUpload}
+          zoneText={"Drag and drop your cocktail image, or click to upload"}
+        />
         <label>
           Name:
           <input type="text" name="name" value={formInput.name} onChange={handleInput} />

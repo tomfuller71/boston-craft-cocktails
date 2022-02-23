@@ -31,6 +31,20 @@ cocktailsRouter.get("/", async (req, res) => {
   }
 })
 
+
+cocktailsRouter.get("/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const cocktail = await Cocktail.query().findById(id)
+    const serializedCockTail = await CocktailSerializer.getDetail(cocktail)
+    res.status(200).json({ cocktail: serializedCockTail })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ errors: error })
+  }
+})
+
 cocktailsRouter.post("/", uploadImage.single("image"), async (req, res) => {
   try {
     if (!req.user) {

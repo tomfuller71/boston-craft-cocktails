@@ -1,0 +1,27 @@
+
+.top-bar {
+  border-bottom: 4px black;
+  border-bottom-style: double;
+  margin-bottom: 1rem;
+  padding: 0rem 0.5rem;
+  vertical-align: middle;
+}
+
+.top-bar .title-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.top-bar .title  {
+  color: black;
+}
+
+.top-bar .logo {
+  height: 4rem;
+  width: 4rem;
+  border: 1.5pt black solid;
+  border-radius: 50%;
+  background-image: url("../images/coupe-cocktail-glass.jpeg");
+  background-size: contain;
+}
