@@ -28,6 +28,23 @@ const VenueIndex = ({ user }) => {
     }
   }
 
+  const inBounds = (venue) => {
+    const { lat, lng } = venue
+    const { nw , se } = venueMap.bounds
+
+    debugger
+    const inLat = lat < nw.lat && lat > se.lat
+    const inLng = lng > nw.lng && lng < se.lng
+
+    return inLat && inLng
+  }
+
+  const filterVenuesByMapBounds = () => {
+    if (venues.length === 0) return []
+    const filtered =  venues.filter(inBounds)
+    return filtered
+  }
+
   const addNewVenue =(newVenue) => {
     setVenues([...venues, newVenue])
   }
@@ -72,7 +89,7 @@ const VenueIndex = ({ user }) => {
           </div>
         </div>
         <div className="cell medium-5 callout">
-          <VenueContainer venues={venues} />
+          <VenueContainer venues={filterVenuesByMapBounds()} />
         </div>
       </div>
     </div>
