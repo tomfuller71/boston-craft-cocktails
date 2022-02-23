@@ -8,8 +8,9 @@ const clientRoutes = [
   "/user-sessions/new",
   "/users/new",
   "/cocktails",
+  "/cocktails/:id",
   "/ingredients/:id",
-  "/cocktails/:venueId",
+  "/venues/cocktails/",
   "/venues/:venueId",
   "/map"
 ]

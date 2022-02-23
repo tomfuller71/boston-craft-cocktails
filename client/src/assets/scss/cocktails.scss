@@ -1,0 +1,47 @@
+.cocktail-rating {
+  position: absolute;
+  bottom: 30px;
+  z-index: 10;
+  background-color: whitesmoke;
+  border-radius:10px;
+  border: 2px solid black;
+  padding: 5px;
+  margin-left: 10px;
+  vertical-align: center;
+}
+
+
+.cocktail-rating h5 {
+  color: goldenrod;
+  font-size: 1.75rem;
+}
+
+
+.cocktail-reviews {
+  max-height: 375px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.cocktail-below-image {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.cocktail-below-image svg {
+  font-size: 1.5rem;
+}
+.cocktail-below-image, .review-rating span {
+  color: grey
+}
+
+
+@media (min-width: 640px) {
+  .cocktail-tile {
+    max-height: 500px;
+  }
+  
+  .cocktail-image img {
+    max-height: 375px;
+  }
+}

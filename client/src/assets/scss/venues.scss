@@ -12,10 +12,39 @@
 
 .venue-map-icon svg {
   font-size: 1.5rem;
-  color: gold
+  color: goldenrod
 }
 
 .map-size {
   width: 100%;
   height: 400px;
+}
+
+.rating {
+  display: inline-block;
+  background-color: white;
+  padding: 0px;
+}
+
+.rating .solid {
+  color: goldenrod;
+}
+
+.cocktail-stats p {
+  margin: 0px;
+  padding: 0px;
+  line-height: 120%;
+}
+
+.cocktail-container {
+  font-size: 12px;
+}
+
+.cocktail-count svg {
+  margin-left: 5px;
+  font-size: 13px;
+}
+
+.cocktail-count {
+  color: grey;
 }

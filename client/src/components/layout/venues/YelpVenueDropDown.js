@@ -1,34 +1,64 @@
 import React, { useState } from "react"
+import { Redirect } from "react-router-dom"
 
-const YelpVenueDropDown = ({ yelpVenues, updateYelpVenue }) => {
+import Fetcher from "../../../services/Fetcher.js"
+import ErrorList from "../ErrorList.js"
 
-  const [selected, setSelected] = useState({ name: "Select from Yelp" })
+const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
+  const [selectedId, setSelectedId] = useState("")
+  const [errors, setErrors] = useState([])
+  const [shouldRedirect, setShouldRedirect] = useState(false)
 
   const handleSelect = (event) => {
-    console.log(event.currentTarget.value)
-    setSelected(event.currentTarget.value)
+    setSelectedId(event.target.value)
   }
 
+  const getNewVenue = async () => {
+    const selectedVenue = yelpVenues.find(venue => venue.id === selectedId)
+    delete selectedVenue.id
+    const response = await Fetcher.post("api/v1/venues", selectedVenue)
+    if (response.ok) {
+      console.log(response.data.venue)
+      return addNewVenue(response.data.venue)
+    }
+    setErrors(response.validationErrors)
+  }
+  
   const handleSubmit = (event) => {
     event.preventDefault()
-    updateYelpVenue(selectedVenue)
+    if (!user) return setShouldRedirect(true)
+    if (!selectedId) return
+
+    setSelectedId("")
+    setErrors([])
+    getNewVenue()
   }
 
   const options = yelpVenues.map((venue) => {
     return (
-      <option key={venue.id} value={venue}>{venue.name}</option>
+      <option key={venue.id} value={venue.id}>{venue.name}</option>
     )
   })
 
+  if (shouldRedirect) {
+    return <Redirect push to="/user-sessions/new" />
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-    <label>
-      <select value={selected.name} onChange={handleSelect}>
-        {options}
-      </select>
-    </label>
-    <input type="submit" value="Submit" />
-  </form>
+    <>
+      <ErrorList errors={errors} />
+      <form onSubmit={handleSubmit}>
+      <label>
+        <select value={selectedId} onChange={handleSelect}>
+          <option key="emptyValue" value={""}>
+            Select from nearby places
+          </option>
+          {options}
+        </select>
+      </label>
+      <input className = "button" type="submit" value="Submit" />
+    </form>
+    </>
   )
 }
 

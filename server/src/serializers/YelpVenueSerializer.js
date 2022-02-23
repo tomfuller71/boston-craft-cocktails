@@ -4,6 +4,7 @@ class YelpVenueSerializer {
   static getSummary(venue) {
     const serializedVenue = allow(venue, ["id", "name", "coordinates", "rating"])
     return {
+      id: serializedVenue.id,
       name: serializedVenue.name,
       lat: serializedVenue.coordinates.latitude,
       lng: serializedVenue.coordinates.longitude

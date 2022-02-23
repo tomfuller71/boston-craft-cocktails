@@ -1,14 +1,19 @@
 @import "./foundation/settings";
 @import "~foundation-sites/scss/foundation";
 @include foundation-everything;
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 
 @import "./venues.scss";
+@import "./addCocktail.scss";
+@import "./cocktails.scss";
+@import "./topBar.scss";
 
 
-*,
+*, h1, h2, h3, h4, h5 ,h6
 *::before,
 *::after {
   box-sizing: border-box;
+  font-family: 'Oswald', sans-serif;
 }
 
 :root {
@@ -16,37 +21,6 @@
   tab-size: 4;
 }
 
-.cocktail-rating {
-  position: absolute;
-  bottom: 30px;
-  z-index: 10;
-  background-color: whitesmoke;
-  border-radius:10px;
-  border: 2px solid black;
-  padding: 5px;
-  margin-left: 10px;
-  vertical-align: center;
-}
-
-.cocktail-rating h5 {
-  color: goldenrod;
-  font-size: 1.75rem;
-}
-
-
-.cocktail-reviews {
-  max-height: 375px;
-  overflow: hidden;
-  overflow-y: scroll;
-}
-
-
-@media (min-width: 640px) {
-  .cocktail-tile {
-    max-height: 500px;
-  }
-  
-  .cocktail-image img {
-    max-height: 375px;
-  }
+button {
+  background-color: lightgray;
 }
