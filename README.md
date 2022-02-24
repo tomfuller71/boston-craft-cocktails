@@ -2,6 +2,8 @@
 
 *A web-site that focuses on the original cocktails available in Boston's many bars and restaurants that make their own original cocktails*
 
+Note: **there is no Google API key in here so its not going to work without inserting a key in the VenueMap.js file**
+
 - [github](https://github.com/tomfuller71/boston-craft-cocktails)
 
 - [trello project board](https://trello.com/b/fPvSVEur/breakable-toy)
