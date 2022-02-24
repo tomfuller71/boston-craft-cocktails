@@ -51,9 +51,9 @@ const VenueMap = ({ venues, updateMap, selectedVenue, setSelectedVenue }) => {
   return (
     <div className="map-size">
       <GoogleMapReact
-        bootstrapURLKeys={{ 
-          key: "",
-          map_ids: "5fd11bc84f3b27e2"
+        bootstrapURLKeys={{
+          key: "AIzaSyAZ29sb5HAVYyyBQZZmyFpNGZJ4EmGjKfc",
+          map_ids: "5fd11bc84f3b27e2",
         }}
         options={setMapStyle}
         defaultCenter={map.center}
