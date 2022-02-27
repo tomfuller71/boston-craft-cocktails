@@ -67,7 +67,7 @@ const VenueIndex = ({ user }) => {
   return (
     <div className="venues-list cell callout">
       <div className="grid-x grid-margin-x">
-        <div className="cell medium-7 callout">
+        <div className="venue-map-container cell medium-7 callout">
           <div className="grid-y grid-margin-y">
             <div className="cell">
               <VenueMap 

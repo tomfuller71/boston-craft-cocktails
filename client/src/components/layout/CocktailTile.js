@@ -52,20 +52,20 @@ const CocktailTile = (props) => {
 
     return (
       <div className="cocktail-tile callout cell">
-        <div className="cocktail-header grid-x grid-margin-x">
-          <div className="cell small-10">
+        <div className="cocktail-header grid-x grid-margin-x align-justify">
+          <div className="cell auto">
             <h3>
               {name} @ {venueName}
             </h3>
           </div>
-          <div className="cell small-2 text-center">
+          <div className="cell auto text-right add-review-button">
             <button type="button" className="button" onClick={addReviewButtonClickHandler}>
               Add review
             </button>
           </div>
         </div>
         <div className="cocktail-panel grid-x grid-margin-x">
-          <div className="cell small-8 medium-3 cocktail-image">
+          <div className="cell small-8 medium-shrink cocktail-image">
             <div>
               <img src={image} />
             </div>
@@ -78,11 +78,11 @@ const CocktailTile = (props) => {
               </div>
             </div>
           </div>
-          <div className="cell small-4 medium-2 callout cocktail-ingredients">
-            <h5 className="text-left">Ingredients:</h5>
-            <ul className="vertical menu">{ingredientsList}</ul>
+          <div className="cell small-4 medium-shrink callout cocktail-ingredients">
+            <h5>Ingredients:</h5>
+            <ul className="ingredient-list vertical menu">{ingredientsList}</ul>
           </div>
-          <div className="cell small-12 medium-7 cocktail-reviews">
+          <div className="cell small-12 medium-auto cocktail-reviews">
             {!showReviewForm && <ReviewIndex reviews={reviewsData} />}
             {showReviewForm && (
               <AddReviewForm userId={user.id} addReview={addReview} errors={addReviewFormErrors} />

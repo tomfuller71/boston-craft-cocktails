@@ -23,7 +23,7 @@ const TopBar = ({ user }) => {
   return (
     <div className="top-bar">
       <div className="top-bar-left">
-        <ul className="menu">
+        <ul className="menu shrink">
           <li className="title-container">
             <Link to="/">
               <div className="logo"></div>

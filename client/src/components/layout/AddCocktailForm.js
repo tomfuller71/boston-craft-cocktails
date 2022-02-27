@@ -80,22 +80,23 @@ const AddCocktailForm = ({ user, match }) => {
   }
 
   const addCocktail = async () => {
-    let ingredientIds = []
-    if (selectedIngredients) {
-      ingredientIds = selectedIngredients.map(e => e.id)
-    }
+    const cocktailComponents = selectedIngredients 
+          ? selectedIngredients.map((ingredient) => { 
+            return { ingredientId: ingredient.id } })
+          : []
+    
+    const stringComponents = JSON.stringify(cocktailComponents)
 
     const data = {
       ...formInput,
-       ingredientIds: ingredientIds
+      cocktailComponents: stringComponents
     }
-    console.log(data)
-
+    
     const formData = new FormData()
     for (const key of Object.keys(data)) {
       formData.append(key, data[key])
     }
-
+    
     try {
       const response = await fetch("/api/v1/cocktails", {
         method: "POST",

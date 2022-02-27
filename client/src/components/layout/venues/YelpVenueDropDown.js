@@ -18,7 +18,6 @@ const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
     delete selectedVenue.id
     const response = await Fetcher.post("api/v1/venues", selectedVenue)
     if (response.ok) {
-      console.log(response.data.venue)
       return addNewVenue(response.data.venue)
     }
     setErrors(response.validationErrors)
