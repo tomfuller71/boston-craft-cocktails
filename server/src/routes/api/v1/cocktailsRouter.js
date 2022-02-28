@@ -60,8 +60,6 @@ cocktailsRouter.post("/", uploadImage.single("image"), async (req, res) => {
         return await Cocktail.query(transaction).insertGraph(formData);
     });
 
-    console.log(cocktail)
-
     const serialized = CocktailSerializer.getSummary(cocktail)
 
     res.status(201).json({ cocktail: serialized })

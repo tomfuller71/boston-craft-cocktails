@@ -1,8 +1,29 @@
 .dropped-image {
-  max-height: 300px;
-  width: 300px;
   box-shadow: 3px 3px 3px grey;
   color: grey;
   font-size: smaller;
   text-align: center;
+  
+  img {
+    max-height: 300px;
+    max-width: 300px;
+  }
+}
+
+.drop-area {
+  height: 300px;
+  width: 300px;
+  line-height: 100%;
+  border: 1.5px gray dashed;
+  border-radius: 25px;
+
+  p {
+      margin-top: 40%;
+      font-size: 1rem;
+      padding: 0px 30px;
+  }
+}
+
+.add-cocktail-form {
+  max-width: 573px;
 }

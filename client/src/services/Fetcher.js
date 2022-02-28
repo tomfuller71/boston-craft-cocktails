@@ -1,6 +1,4 @@
-import _ from "lodash"
-
-import translateServerErrors from "./translateServerErrors.js"
+import startCase from "lodash.startcase"
 
 /**
  * A helper class for fetch api:
@@ -15,6 +13,8 @@ class Fetcher {
    * @param {object=} options Options for configuring the post request:
    * - `validationStatus`: the validation errors status code, default 422
    * - `validationErrorParser`: parsing function used on `validationErrors' - defaults to parse "objection" validation errors
+   * - bodyJSON: header Content-Type - default true ("application/json")
+   * - acceptImage: default false - header Accept:"image/jpeg" added if true 
    * @returns A response object with properties of :
    * - `ok`: true if successfully inserted
    * - `data`: the post response body
@@ -25,22 +25,33 @@ class Fetcher {
     body,
     { 
       validationStatus = 422,
-      validationErrorParser = translateServerErrors,
-      contentType = "json"
+      validationErrorParser = this.parseObjectionValidationErrors,
+      bodyJSON = true,
+      acceptImage = false,
     } = {} ) {
+      
+      const response = {
+        ok: false,
+        data: null,
+        validationErrors: {},
+      }
 
-    const response = {
-      ok: false,
-      data: null,
-      validationErrors: {},
-    }
+      let headers = {}
+      if (bodyJSON) {
+        headers["Content-Type"] = "application/json"
+      }
 
+      if (acceptImage) {
+        headers["Accept"] = "image/jpeg"
+      }
+      
     try {
       const fetchOptions = {
         method: "POST",
-        headers: new Headers({ "Content-Type": "application/json" }),
-        body: JSON.stringify(body),
+        headers: new Headers(headers),
+        body: bodyJSON ? JSON.stringify(body) : body,
       }
+      
       const fetchResponse = await fetch(route, fetchOptions)
 
       if (!fetchResponse.ok) {
@@ -59,7 +70,6 @@ class Fetcher {
     } catch (err) {
       console.error(`Error in fetch: ${err.message}`)
     }
-
     return response
   }
   /**
@@ -93,7 +103,7 @@ class Fetcher {
       let serializedErrors = {};
       for (const key of Object.keys(errors)) {
         errors[key].forEach((error) => {
-          serializedErrors[key] = `${_.startCase(key)} ${error.message}`;
+          serializedErrors[key] = `${startCase(key)} ${error.message}`;
         });
       }
       return serializedErrors;

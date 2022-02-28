@@ -9,7 +9,7 @@ const DropAndPreviewImage =({ previewURL, handleDrop, zoneText }) => {
           <Dropzone onDrop={handleDrop}>
             {({ getRootProps, getInputProps }) => (
               <section>
-                <div className="drop-zone" {...getRootProps()}>
+                <div className="drop-area" {...getRootProps()}>
                   <input {...getInputProps()} />
                   <p>{zoneText}</p>
                 </div>

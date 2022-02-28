@@ -9,6 +9,15 @@ const usersRouter = new express.Router()
 usersRouter.post("/", async (req, res) => {
   const { name, email, password } = req.body
   try {
+
+    if (password.length < 8) {
+      throw new ValidationError({
+        type: 'ModelValidation',
+        data: { password: [{ message: "Needs to be at least 8 characters" }] },
+        statusCode: 400
+      })
+    }
+
     const persistedUser = await User.query()
     .insertAndFetch({ name, email, password })
 

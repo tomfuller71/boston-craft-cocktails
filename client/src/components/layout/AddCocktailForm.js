@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { Redirect, withRouter } from "react-router-dom"
+import { Redirect, withRouter, Link } from "react-router-dom"
+import startCase from "lodash.startcase"
 
 import ErrorList from "./ErrorList.js"
-import translateServerErrors from "../../services/translateServerErrors.js"
-import DropAndPreviewImage from "./DropAndPreviewImage.js"
 import Fetcher from "../../services/Fetcher.js"
+import DropAndPreviewImage from "./DropAndPreviewImage.js"
+import IngredientSelector from "./IngredientSelector.js"
 
 const AddCocktailForm = ({ user, match }) => {
   const venueId = match.params.venueId
@@ -17,55 +18,7 @@ const AddCocktailForm = ({ user, match }) => {
   const [shouldRedirect, setShouldRedirect] = useState(false)
   const [previewURL, setPreviewURL] = useState(null)
 
-  const [ingredientsList, setIngredientsList] = useState([])
-  const [matchingIngredients, setMatchingIngredients] = useState([])
-  const [selectedIngredients, setSelectedIngredients] = useState([])
-  const [searchInput, setSearchInput] = useState("")
-  const [ingredientId, setIngredientId] = useState("")
-
-  const getIngredients = async () => {
-    const response = await Fetcher.get("/api/v1/ingredients")
-    if (response.ok) {
-      setIngredientsList(response.data.ingredients)
-    }
-  }
-
-  useEffect(() => {
-    getIngredients()
-  }, [])
-
-  const handleSearchInput = (event) => {
-    const input = event.target.value
-    setSearchInput(input)
-
-    const matching = ingredientsList.filter(ingredient => {
-      const regex = RegExp(`^${input}`,"i")
-      return regex.test(ingredient.name.toLowerCase())
-    })
-    setMatchingIngredients(matching)
-  }
-
-  const handleSelectIngredient = (event) => {
-    setIngredientId(event.target.value)
-  }
-
-  const handleAddIngredient = (event) => {
-    event.preventDefault()
-
-    const selected = ingredientsList.find((ingredient) => {
-      return ingredient.id === ingredientId
-    })
-
-    const alreadyAdded = selectedIngredients.some((ingredient) => {
-      return ingredient.id === selected.id
-    })
-
-    if (!alreadyAdded) {
-      setSelectedIngredients([ ...selectedIngredients, selected])
-      setSearchInput("")
-      setMatchingIngredients([])
-    }
-  }
+  const [selectedComponentOptions, setSelectedComponentOptions] = useState([])
 
   const handleInput = (event) => {
     const { name, value } = event.currentTarget
@@ -79,46 +32,37 @@ const AddCocktailForm = ({ user, match }) => {
     setFormInput({ ...formInput, image })
   }
 
+  const handleIngredientSelect = (options) => {
+    setSelectedComponentOptions(options)
+  }
+
+
   const addCocktail = async () => {
-    const cocktailComponents = selectedIngredients 
-          ? selectedIngredients.map((ingredient) => { 
-            return { ingredientId: ingredient.id } })
-          : []
-    
-    const stringComponents = JSON.stringify(cocktailComponents)
+    const cocktailComponents = selectedComponentOptions.map((option) => { 
+      return { ingredientId: option.value }
+    })
 
     const data = {
       ...formInput,
-      cocktailComponents: stringComponents
+      name: startCase(formInput.name),
+      cocktailComponents: JSON.stringify(cocktailComponents)
     }
     
     const formData = new FormData()
     for (const key of Object.keys(data)) {
       formData.append(key, data[key])
     }
-    
-    try {
-      const response = await fetch("/api/v1/cocktails", {
-        method: "POST",
-        headers: {
-          Accept: "image/jpeg",
-        },
-        body: formData
-      })
 
-      if (!response.ok) {
-        if (response.status === 422) {
-          const body = await response.json()
-          const newErrors = translateServerErrors(body.errors)
-          return setErrors(newErrors)
-        } else {
-          throw new Error(`${response.status} (${response.statusText})`)
-        }
-      }
-      setShouldRedirect(true)
-    } catch (error) {
-      console.error(`Error in Fetch: ${error.message}`)
+    const response = await Fetcher.post(
+      "/api/v1/cocktails",
+      formData,
+      { bodyJSON: false, acceptImage: true }  
+    )
+
+    if (response.ok) {
+      return setShouldRedirect(true)
     }
+    setErrors(response.validationErrors)
   }
 
   const handleSubmit = (event) => {
@@ -130,18 +74,15 @@ const AddCocktailForm = ({ user, match }) => {
     event.preventDefault()
     setFormInput(defaultInput)
     setPreviewURL(null)
+    setErrors([])
   }
 
-  const ingredientOptions = matchingIngredients.map((ingredient) => {
+  const userAddedIngredients = selectedComponentOptions.map((option) => {
     return (
-      <option key={ingredient.id} value={ingredient.id}>
-        {ingredient.name}
-      </option>
+      <li key={option.value}>
+        <Link to={`/ingredients/${option.value}`}>{option.label}</Link>
+      </li>
     )
-  })
-
-  const userAddedIngredients = selectedIngredients.map((addedIng) => {
-    return <li key={addedIng.id}>{addedIng.name}</li>
   })
 
   if (shouldRedirect) {
@@ -149,44 +90,43 @@ const AddCocktailForm = ({ user, match }) => {
   }
 
   return (
-    <div>
-      <h1>Add a New Cocktail</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="grid-x grid-margin-x">
+      <div className="cell">
+        <h1>Add a New Cocktail</h1>
+      </div>
+      <div className="cell shrink">
         <DropAndPreviewImage
           previewURL={previewURL}
           handleDrop={handleImageUpload}
           zoneText={"Drag and drop your cocktail image, or click to upload"}
         />
-        <ul>
-          {userAddedIngredients}
-        </ul>
-        <ErrorList errors={errors} />
-        <label>
-          Name:
-          <input type="text" name="name" value={formInput.name} onChange={handleInput} />
-        </label>
-        <label>
-          Select Cocktail Ingredients:
-          <input type="text" name="search" value={searchInput} onChange={handleSearchInput} placeholder="Start typing to get suggestions"/>
-        </label>
-        <div className="button-group">
-          <input className="button" type="submit" value="Submit" />
-          <input className="button" type="button" value="Clear Form" onClick={clearForm} />
-        </div>
-      </form>
-      <form onSubmit={handleAddIngredient}>
-        <label>
-          <select value={ingredientId} onChange={handleSelectIngredient}>
-            <option key="emptyValue" value={""}>
-              Select from available matching ingredients
-            </option>
-            {ingredientOptions}
-          </select>
-        </label>
-        <input className = "button" type="submit" value="Add" />
-      </form>
+      </div>
+      
+      <div className="cell small-4 medium-shrink callout">
+          <h5>Ingredients:</h5>
+          <ul className="ingredient-list vertical menu">
+            {userAddedIngredients}
+          </ul>
+      </div>
+
+      <div className="add-cocktail-form cell callout">
+        <form onSubmit={handleSubmit}>
+          <ErrorList errors={errors} />
+          <label>
+            Name:
+            <input type="text" name="name" value={formInput.name} onChange={handleInput} />
+          </label>
+            Select Cocktail Ingredients:
+            <IngredientSelector handleIngredientSelect={handleIngredientSelect} />
+          <div className="button-group">
+            <input className="button" type="submit" value="Submit" />
+            <input className="button" type="button" value="Clear Form" onClick={clearForm} />
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
+
 
 export default withRouter(AddCocktailForm)

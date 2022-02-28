@@ -14,6 +14,7 @@ import AddCocktailForm from "./layout/AddCocktailForm.js"
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute.js"
 import VenueMap from "./layout/venues/VenueMap.js"
 import CocktailShow from "./layout/CocktailShow.js"
+import IngredientSelector from "./layout/IngredientSelector"
 
 const App = (props) => {
 	const [currentUser, setCurrentUser] = useState(null)
