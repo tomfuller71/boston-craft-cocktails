@@ -61,6 +61,9 @@ const VenueIndex = ({ user }) => {
 
   useEffect(() => {
     getVenues()
+  }, [])
+
+  useEffect(() => {
     getYelpVenues()
   }, [])
 
@@ -71,7 +74,7 @@ const VenueIndex = ({ user }) => {
           <div className="grid-y grid-margin-y">
             <div className="cell">
               <VenueMap 
-                venues={ venues }
+                venues={venues}
                 updateMap={updateMap}
                 selectedVenue={selectedVenue}
                 setSelectedVenue={setSelectedVenue}

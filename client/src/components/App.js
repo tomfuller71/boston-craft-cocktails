@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { hot } from "react-hot-loader/root"
 
 import getCurrentUser from "../services/getCurrentUser"
@@ -12,9 +12,7 @@ import SignUpForm from "./registration/SignUpForm.js"
 import VenueIndex from "./layout/venues/VenueIndex.js"
 import AddCocktailForm from "./layout/AddCocktailForm.js"
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute.js"
-import VenueMap from "./layout/venues/VenueMap.js"
 import CocktailShow from "./layout/CocktailShow.js"
-import IngredientSelector from "./layout/IngredientSelector"
 
 const App = (props) => {
 	const [currentUser, setCurrentUser] = useState(null)
