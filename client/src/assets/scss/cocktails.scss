@@ -1,33 +1,30 @@
-.cocktail-rating {
-  position: absolute;
-  bottom: 30px;
-  z-index: 10;
-  background-color: whitesmoke;
-  border-radius:10px;
-  border: 2px solid black;
-  padding: 5px;
-  margin-left: 10px;
-  vertical-align: center;
-}
-
-
-.cocktail-rating h5 {
-  color: goldenrod;
-  font-size: 1.75rem;
-}
-
-
 .cocktail-reviews {
-  max-height: 375px;
   overflow: hidden;
   overflow-y: scroll;
+}
+
+.cocktail-reviews, .cocktail-ingredients {
+  max-height: 360px;
+}
+
+ul.ingredient-list {
+  line-height: 100%;
+  list-style: none;
+  margin-left: 0px;
+  min-width: 175px;
+
+  a {
+    padding: 0.5rem;
+  }
 }
 
 .cocktail-below-image {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  max-width: 300px;
 }
+
 .cocktail-below-image svg {
   font-size: 1.5rem;
 }
@@ -35,13 +32,18 @@
   color: grey
 }
 
+.cocktail-image img {
+  max-height: 300px;
+  max-width: 300px;
+}
+
+.add-review-button {
+  padding-right: 15px;
+}
 
 @media (min-width: 640px) {
   .cocktail-tile {
-    max-height: 500px;
+    max-height: 560px;
   }
   
-  .cocktail-image img {
-    max-height: 375px;
-  }
 }

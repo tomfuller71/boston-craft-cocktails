@@ -1,6 +1,7 @@
 import React from "react"
 
 const ErrorList = props => {
+
   const errantFields = Object.keys(props.errors)
   if (errantFields.length > 0) {
     let index = 0
@@ -8,7 +9,7 @@ const ErrorList = props => {
       index++
       return (
         <li key={index}>
-          {field} {props.errors[field]}
+          {props.errors[field]}
         </li>
       )
     })

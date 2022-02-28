@@ -1,10 +1,9 @@
 import React, { useState } from "react"
-import { Redirect } from "react-router-dom"
-import _ from "lodash"
 
 import FormError from "../layout/FormError"
 import config from "../../config"
 import Fetcher from "../../services/Fetcher.js"
+
 
 const SignUpForm = () => {
   const [userPayload, setUserPayload] = useState({
@@ -28,14 +27,9 @@ const SignUpForm = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault()
-
     if (!validInput(userPayload)) return
 
-    const response = await Fetcher.post(
-			"/api/v1/users",
-			 userPayload,
-			{ validationErrorParser: serializeValidationErrors }
-		)
+    const response = await Fetcher.post("/api/v1/users", userPayload)
 
     if (response.ok) {
         setShouldRedirect(true)
@@ -108,19 +102,6 @@ const SignUpForm = () => {
       </form>
     </div>
   )
-}
-
-function serializeValidationErrors(errors) {
-    let serializedErrors = {}
-  
-    Object.keys(errors).forEach((key) => {
-      serializedErrors = {
-        ...serializedErrors,
-        [key]: `${_.startCase(key)} already taken.`,
-      }
-    })
-
-    return serializedErrors;
 }
 
 function getFormErrors(payload) {

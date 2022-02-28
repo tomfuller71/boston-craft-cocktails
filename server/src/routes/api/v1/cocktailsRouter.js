@@ -46,35 +46,19 @@ cocktailsRouter.get("/:id", async (req, res) => {
 })
 
 cocktailsRouter.post("/", uploadImage.single("image"), async (req, res) => {
+  const { body, file } = req
+  const formData =  {
+    ...cleanUserInput(body),
+    cocktailComponents: JSON.parse(body.cocktailComponents),
+    image: file ? file.location : null
+  }
+
   try {
-    if (!req.user) {
-      throw new Error("User is not logged in.")
-    }
+    if (!req.user) throw new Error("User is not logged in.")
 
-    const { body, file } = req
-
-    const { ingredientIds } = body
-
-    const formData =  {
-      ...cleanUserInput(body),
-      image: file ? file.location : null
-    }
-
-    console.log(formData)
-    
-    if (ingredientIds) {
-      delete formData.ingredientIds
-    }
-
-    const cocktail = await Cocktail.query().insertAndFetch(formData)
-
-    if(ingredientIds && cocktail) {
-      const ingredientArray = ingredientIds.split(",")
-      for (const id of ingredientArray) {
-        await CocktailComponent.query()
-        .insert({cocktailId: cocktail.id, ingredientId: id })
-      }
-    }
+    const cocktail = await Cocktail.transaction(async transaction => {
+        return await Cocktail.query(transaction).insertGraph(formData);
+    });
 
     const serialized = CocktailSerializer.getSummary(cocktail)
 
@@ -91,3 +75,17 @@ cocktailsRouter.post("/", uploadImage.single("image"), async (req, res) => {
 cocktailsRouter.use("/:id/reviews", cocktailReviewsRouter)
 
 export default cocktailsRouter
+    
+    // if (ingredientIds) {
+    //   delete formData.ingredientIds
+    // }
+
+    // const cocktail = await Cocktail.query().insertAndFetch(formData)
+
+    // if(ingredientIds && cocktail) {
+    //   const ingredientArray = ingredientIds.split(",")
+    //   for (const id of ingredientArray) {
+    //     await CocktailComponent.query()
+    //     .insert({cocktailId: cocktail.id, ingredientId: id })
+    //   }
+    // }
