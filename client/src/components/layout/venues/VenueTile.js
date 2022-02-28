@@ -5,7 +5,7 @@ import { faGlassMartiniAlt } from "@fortawesome/free-solid-svg-icons"
 
 import RatingStars from "../RatingStars.js"
 
-const VenueTile = ({ venue }) => {
+const VenueTile = ({ venue, handleCocktailSelect }) => {
   const numberCocktails = venue.cocktails.length
 
   const topRatedCocktail = venue.cocktails.sort((a,b) => {
@@ -16,9 +16,35 @@ const VenueTile = ({ venue }) => {
     return b.reviews.length - a.reviews.length
   })[0]
 
+  const handleClick = (event) => {    
+    event.preventDefault()
+    handleCocktailSelect(event.currentTarget.id)
+  }
+
+  const topButton = topRatedCocktail 
+    ? (
+        <button
+          className="link-button"
+          id={topRatedCocktail.id}
+          onClick={handleClick}
+        >{topRatedCocktail.name}</button>
+    )
+    : "-"
+
+    const reviewedButton = mostReviewed
+    ? (
+        <button
+          className="link-button"
+          id={mostReviewed.id}
+          onClick={handleClick}
+        >{mostReviewed.name}</button>
+    )
+    : "-"
+  
+
   return (
     <div className="venue-tile grid-x grid-margin-x callout">
-      <div className="cell medium-6">
+      <div className="cell auto">
         <Link to={{
           pathname: "venues/cocktails",
           search: `?venueId=${venue.id}`
@@ -33,26 +59,14 @@ const VenueTile = ({ venue }) => {
         </div>
         <div className="cocktail-stats">
           <p>Top rated:
-            {
-              topRatedCocktail
-              ? <Link to={`/cocktails/${topRatedCocktail.id}`}>
-                  {` ${topRatedCocktail.name}`}
-                </Link>
-              : "-"
-            }
+             {topButton}
           </p>
           <p>Most reviewed:
-            {
-              mostReviewed
-              ? <Link to={`/cocktails/${mostReviewed.id}`} >
-                  {` ${mostReviewed.name}`}
-                </Link>
-              : "-"
-            }
+             {reviewedButton}
           </p>
         </div>
       </div>
-      <div className="cell medium-6">
+      <div className="cell auto shrink text-right">
         <Link className="button" to={`/venues/${venue.id}/addCocktail`} >
           Add Cocktail
         </Link>

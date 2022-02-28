@@ -37,6 +37,12 @@ class CocktailSerializer {
             return this.getDetail(cocktail)
         }))
     }
+
+    static getCocktailOptions(cocktails) {
+        return cocktails.map((cocktail) => {
+            return {value: cocktail.id, label: cocktail.name }
+        })
+    }
 }
 
 export default CocktailSerializer
