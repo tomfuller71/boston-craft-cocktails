@@ -32,6 +32,20 @@ cocktailsRouter.get("/", async (req, res) => {
 })
 
 
+cocktailsRouter.get("/options", async (req, res) => {
+  try {
+    const cocktails = await Cocktail.query()
+    const options = await CocktailSerializer.getCocktailOptions(cocktails)
+
+    res.status(200).json({ options })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ errors: error })
+  }
+})
+
+
+
 cocktailsRouter.get("/:id", async (req, res) => {
   const { id } = req.params
 

@@ -2,15 +2,20 @@ import React from "react";
 
 import VenueTile from "./VenueTile";
 
-const VenueContainer = ({ venues }) => {
+const VenueContainer = ({ venues, handleCocktailSelect }) => {
 
   const venueList = venues.map((venue) => {
-    return  <VenueTile key={venue.id} venue={venue} />
+    return  (
+      <VenueTile
+        key={venue.id}
+        venue={venue}
+        handleCocktailSelect={handleCocktailSelect}
+      />
+    )
   })
 
   return (
-    <div className="venue-list-container">
-      <h5>Craft cocktails @</h5>
+    <div className="venues-overflow">
     {venueList}
     </div>
   )
