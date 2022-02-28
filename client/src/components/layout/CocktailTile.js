@@ -9,15 +9,24 @@ import RatingStars from "./RatingStars.js"
 const CocktailTile = (props) => {
 		const { id, name, image, ingredients, venueName, user, reviews } = props
     const [reviewsData, setReviews] = useState(reviews)
+    const [averageRating, setAverageRating] = useState(props.averageRating)
+    const [reviewsCount, setReviewsCount] = useState(reviews.length)
+    
     const [addReviewFormErrors, setAddReviewFormErrors] = useState({})
     const [showReviewForm, setShowReviewForm] = useState(false)
     const [redirectSignIn, setRedirectSignIn] = useState(false)
 
-    const addReview = async (reviewData) => {
-      const response = await Fetcher.post(`/api/v1/cocktails/${id}/reviews`, reviewData)
+    const addReview = async (review) => {
+      const response = await Fetcher.post(`/api/v1/cocktails/${id}/reviews`, review)
 
       if (response.ok) {
+        const newCount = (reviewsCount + 1)
+        const newAvg = averageRating * reviewsCount + review.rating / newCount
+
         setReviews([response.data.review, ...reviewsData])
+        setAverageRating(newAvg)
+        setReviewsCount(newCount)
+        
         return setShowReviewForm(false)
       }
       setAddReviewFormErrors(response.validationErrors)
@@ -71,10 +80,10 @@ const CocktailTile = (props) => {
             </div>
             <div className="cocktail-below-image callout">
               <div>
-                <RatingStars rating={Math.round(props.averageRating)} />
+                <RatingStars rating={Math.round(averageRating)} />
               </div>
               <div>
-                <span> {reviews.length} reviews</span>
+                <span> {reviewsCount} reviews</span>
               </div>
             </div>
           </div>
