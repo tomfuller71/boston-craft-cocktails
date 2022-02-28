@@ -91,7 +91,7 @@ const VenueIndex = ({ user }) => {
           </div>
         </div>
         <div className="cell medium-5 callout">
-          <VenueContainer venues={filterVenuesByMapBounds()} />
+          <VenueContainer venues={venues} />
         </div>
       </div>
     </div>
