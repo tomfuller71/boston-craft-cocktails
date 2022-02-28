@@ -63,9 +63,9 @@ const VenueIndex = ({ user }) => {
     getVenues()
   }, [])
 
-  useEffect(() => {
-    getYelpVenues()
-  }, [])
+  // useEffect(() => {
+  //   getYelpVenues()
+  // }, [])
 
   return (
     <div className="venues-list cell callout">
