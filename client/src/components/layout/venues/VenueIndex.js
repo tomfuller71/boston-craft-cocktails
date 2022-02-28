@@ -9,12 +9,17 @@ const VenueIndex = ({ user }) => {
   const [venues, setVenues] = useState([])
   const [venueMap, setVenueMap] = useState(getMapDefaults())
   const [selectedVenue, setSelectedVenue] = useState(null)
+  const [filteredVenues, setFilteredVenues] = useState([])
   const [yelpVenues, setYelpVenues] = useState([])
 
   const getVenues = async () => {
     const response = await Fetcher.get("/api/v1/venues",)
     if (response.ok) {
-      setVenues(response.data.venues)
+      const fetchedVenues = response.data.venues
+      
+      const initialFilter = filterVenues(fetchedVenues, venueMap.bounds)
+      setFilteredVenues(initialFilter)
+      setVenues(fetchedVenues)
     }
   }
 
@@ -26,22 +31,6 @@ const VenueIndex = ({ user }) => {
     if (response.ok) {
       setYelpVenues(response.data.venues)
     }
-  }
-
-  const inBounds = (venue) => {
-    const { lat, lng } = venue
-    const { nw , se } = venueMap.bounds
-
-    const inLat = lat < nw.lat && lat > se.lat
-    const inLng = lng > nw.lng && lng < se.lng
-
-    return inLat && inLng
-  }
-
-  const filterVenuesByMapBounds = () => {
-    if (venues.length === 0) return []
-    const filtered =  venues.filter(inBounds)
-    return filtered
   }
 
   const addNewVenue =(newVenue) => {
@@ -56,16 +45,14 @@ const VenueIndex = ({ user }) => {
     if (chgCenter > 0.005 || chgRadius > 50) {
       getYelpVenues()
     }
+    const filtered = filterVenues(venues, newMap.bounds)
+    setFilteredVenues(filtered)
     setVenueMap(newMap)
   }
 
   useEffect(() => {
     getVenues()
   }, [])
-
-  // useEffect(() => {
-  //   getYelpVenues()
-  // }, [])
 
   return (
     <div className="venues-list cell callout">
@@ -91,7 +78,7 @@ const VenueIndex = ({ user }) => {
           </div>
         </div>
         <div className="cell medium-5 callout">
-          <VenueContainer venues={venues} />
+          <VenueContainer venues={filteredVenues} />
         </div>
       </div>
     </div>
@@ -113,6 +100,19 @@ function getMapDefaults() {
     },
     radius: 3000
   }
- }
+}
+
+function filterVenues(venueList, bounds) {
+  if (venueList.length === 0) return []
+  const filtered =  venueList.filter((venue) => {
+    const { lat, lng } = venue
+    const { nw , se } = bounds
+    const inLat = lat < nw.lat && lat > se.lat
+    const inLng = lng > nw.lng && lng < se.lng
+
+    return inLat && inLng
+  })
+  return filtered
+}
 
 export default VenueIndex
