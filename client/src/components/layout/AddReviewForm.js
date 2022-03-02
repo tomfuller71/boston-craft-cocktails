@@ -2,7 +2,7 @@ import React, { useState } from "react"
 
 import ErrorList from "./ErrorList.js"
 
-const AddReviewForm = ({ addReview, errors }) => {
+const AddReviewForm = ({ addReview,cancelReview, errors }) => {
   const defaultInput = {
     reviewText: "",
     rating: ""
@@ -28,16 +28,23 @@ const AddReviewForm = ({ addReview, errors }) => {
     addReview(reviewData)
   }
 
+  const handleCancel = (event) => {
+    event.preventDefault()
+    cancelReview()
+  }
+
   return (
     <div className="new-review-form">
       <form onSubmit={handleSubmit}>
         <label className="review-text">
           Review:
-          <input
-            type="text"
+          <textarea
+            // type="text"
             name="reviewText"
             onChange={handleInput}
             value={formInput.reviewText}
+            rows={3}
+            maxLength={255}
           />
         </label>
         <label className="review-rating">
@@ -54,6 +61,12 @@ const AddReviewForm = ({ addReview, errors }) => {
           </select>
         </label>
         <input className="button" type="submit" value="Submit" />
+        <input 
+          className="button"
+          type="button"
+          value="Cancel"
+          onClick={handleCancel}
+        />
       </form>
       <ErrorList errors={errors} />
     </div>

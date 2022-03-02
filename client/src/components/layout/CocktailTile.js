@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, Redirect } from "react-router-dom"
 
 import ReviewIndex from "./ReviewIndex"
@@ -6,11 +6,15 @@ import AddReviewForm from "./AddReviewForm"
 import Fetcher from "../../services/Fetcher.js"
 import RatingStars from "./RatingStars.js"
 
-const CocktailTile = (props) => {
-		const { id, name, image, ingredients, venueName, user, reviews } = props
-    const [reviewsData, setReviews] = useState(reviews)
-    const [averageRating, setAverageRating] = useState(props.averageRating)
-    const [reviewsCount, setReviewsCount] = useState(reviews.length)
+const CocktailTile = (
+  { id, name, image, ingredients, venueName, user, reviews, averageRating }
+  ) => {
+
+    const [reviewsData, setReviewsData] = useState({
+      reviews,
+      averageRating,
+      count: reviews.length
+    })
     
     const [addReviewFormErrors, setAddReviewFormErrors] = useState({})
     const [showReviewForm, setShowReviewForm] = useState(false)
@@ -20,16 +24,21 @@ const CocktailTile = (props) => {
       const response = await Fetcher.post(`/api/v1/cocktails/${id}/reviews`, review)
 
       if (response.ok) {
-        const newCount = (reviewsCount + 1)
-        const newAvg = averageRating * reviewsCount + review.rating / newCount
+        const newCount = (reviewsData.count + 1)
+        const newAvg = (reviewsData.averageRating * reviewsData.count + review.rating) / newCount
 
-        setReviews([response.data.review, ...reviewsData])
-        setAverageRating(newAvg)
-        setReviewsCount(newCount)
-        
+        setReviewsData({
+          reviews: [response.data.review, ...reviewsData.reviews],
+          averageRating: newAvg,
+          count: newCount
+        })
         return setShowReviewForm(false)
       }
       setAddReviewFormErrors(response.validationErrors)
+    }
+
+    const cancelReview = () => {
+      setShowReviewForm(false)
     }
 
     const addReviewButtonClickHandler = () => {
@@ -38,6 +47,15 @@ const CocktailTile = (props) => {
       }
       setShowReviewForm(true)
     }
+
+    useEffect(() => {
+      setReviewsData({
+        reviews,
+        averageRating,
+        count: reviews.length
+      })
+
+    }, [reviews])
 
     const ingredientsList = ingredients.map((ingredient) => {
       return (
@@ -80,10 +98,10 @@ const CocktailTile = (props) => {
             </div>
             <div className="cocktail-below-image callout">
               <div>
-                <RatingStars rating={Math.round(averageRating)} />
+                <RatingStars rating={Math.round(reviewsData.averageRating)} />
               </div>
               <div>
-                <span> {reviewsCount} reviews</span>
+                <span> {reviewsData.count} reviews</span>
               </div>
             </div>
           </div>
@@ -92,9 +110,14 @@ const CocktailTile = (props) => {
             <ul className="ingredient-list vertical menu">{ingredientsList}</ul>
           </div>
           <div className="cell small-12 medium-auto cocktail-reviews">
-            {!showReviewForm && <ReviewIndex reviews={reviewsData} />}
+            {!showReviewForm && <ReviewIndex reviews={reviewsData.reviews} />}
             {showReviewForm && (
-              <AddReviewForm userId={user.id} addReview={addReview} errors={addReviewFormErrors} />
+              <AddReviewForm
+                userId={user.id}
+                addReview={addReview}
+                cancelReview={cancelReview}
+                errors={addReviewFormErrors}
+              />
             )}
           </div>
         </div>
