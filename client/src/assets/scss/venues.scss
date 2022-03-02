@@ -12,6 +12,10 @@
   overflow-y: scroll;
 }
 
+.cocktail-search {
+  margin-top: 0.75rem;
+}
+
 button.link-button {
   background-color: white;
   padding-left: 0.5rem;
@@ -57,6 +61,19 @@ button:hover.link-button {
 
 .venues-list {
   max-width: 1450px;
+}
+
+.yelp-add-buttons {
+  display: flex;
+  align-items: center;
+
+  .button {
+    margin-left: 2rem;
+  }
+
+  select {
+    min-width: 30rem;
+  }
 }
 
 

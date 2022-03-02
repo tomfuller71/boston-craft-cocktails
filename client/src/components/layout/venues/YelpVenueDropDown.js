@@ -11,6 +11,7 @@ const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
 
   const handleSelect = (event) => {
     setSelectedId(event.target.value)
+    setErrors([])
   }
 
   const getNewVenue = async () => {
@@ -47,15 +48,17 @@ const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
     <>
       <ErrorList errors={errors} />
       <form onSubmit={handleSubmit}>
-        <label>
-          <select value={selectedId} onChange={handleSelect}>
-            <option key="emptyValue" value={""}>
-              Select from nearby places
-            </option>
-            {options}
-          </select>
-        </label>
-        <input className = "button" type="submit" value="Submit" />
+        <div className="yelp-add-buttons">
+          <label>
+            <select value={selectedId} onChange={handleSelect}>
+              <option key="emptyValue" value={""}>
+                Select from nearby places
+              </option>
+              {options}
+            </select>
+          </label>
+          <input className = "button" type="submit" value="Submit" />
+        </div>
       </form>
     </>
   )

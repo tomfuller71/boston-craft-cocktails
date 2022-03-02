@@ -1,11 +1,9 @@
-.cocktail-reviews {
+.cocktail-reviews, .cocktail-ingredients {
   overflow: hidden;
   overflow-y: scroll;
-}
-
-.cocktail-reviews, .cocktail-ingredients {
   max-height: 360px;
 }
+
 
 ul.ingredient-list {
   line-height: 100%;

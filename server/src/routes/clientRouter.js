@@ -12,7 +12,6 @@ const clientRoutes = [
   "/ingredients/:id",
   "/venues/cocktails/",
   "/venues/:venueId",
-  "/map"
 ]
 
 const authedClientRoutes = ["/profile"]

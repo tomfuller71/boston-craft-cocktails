@@ -30,6 +30,8 @@ const CocktailSearchSelector = ({ handleCocktailSelect }) => {
   }, [])
 
   return (
+    <div>
+      <h5>Search for cocktails</h5>
       <Select
         options={options}
         value={null}
@@ -37,10 +39,11 @@ const CocktailSearchSelector = ({ handleCocktailSelect }) => {
         inputValue={input}
         onChange={handleChange}
         filterOption={filter}
-        placeholder="Search for cocktails ..."
+        placeholder="Input to filter suggestions ..."
         isClearable={true}
         escapeClearsValue={true}
       />
+    </div>
   )
 }
 

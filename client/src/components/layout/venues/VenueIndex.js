@@ -94,7 +94,7 @@ const VenueIndex = ({ user }) => {
             venues={filteredVenues}
             handleCocktailSelect={handleCocktailSelect}
           />
-          <div className="callout">
+          <div className="cocktail-search callout">
             <CocktailSearchSelector
               handleCocktailSelect={handleCocktailSelect}
             />
