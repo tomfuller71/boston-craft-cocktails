@@ -7,7 +7,7 @@ const ReviewIndex = ({ reviews, user, editReviewButtonClickHandler }) => {
     return (
       <ReviewTile
         key={review.id}
-        isEditable={user.id === review.userId}
+        isEditable={user && user.id === review.userId}
         editReview={editReviewButtonClickHandler}
         review={review}
       />
