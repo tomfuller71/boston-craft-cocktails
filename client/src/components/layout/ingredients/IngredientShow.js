@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-import Fetcher from "../../services/Fetcher.js"
+import Fetcher from "../../../services/Fetcher.js"
 
 const IngredientShow = (props) => {
 		const { id } = props.match.params

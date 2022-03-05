@@ -1,0 +1,17 @@
+.review-data span {
+  margin-right: 0.75rem;
+}
+
+.review-user {
+  margin-left: 0.75rem;
+}
+
+.review-data, .review-rating {
+  span {
+    color: $secondary-color;
+  }
+}
+
+.review-data svg {
+  color: goldenrod;
+}

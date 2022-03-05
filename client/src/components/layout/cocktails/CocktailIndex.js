@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { withRouter } from "react-router-dom"
 
 import CocktailTile from "./CocktailTile.js"
-import Fetcher from "../../services/Fetcher.js"
+import Fetcher from "../../../services/Fetcher.js"
 
 const CocktailIndex = ({ user, location }) => {
   const [cocktails, setCocktails] = useState([])

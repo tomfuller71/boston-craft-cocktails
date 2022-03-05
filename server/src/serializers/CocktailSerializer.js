@@ -19,7 +19,11 @@ class CocktailSerializer {
         const serializedCocktail = this.getSummary(cocktail)
         const ingredients = await cocktail.$relatedQuery("ingredients")
         const venue = await cocktail.$relatedQuery("venue")
-        const reviews = await cocktail.$relatedQuery("reviews")
+        
+        const reviews = await cocktail
+            .$relatedQuery("reviews")
+            .orderBy("updatedAt" ,"desc")
+
         const serializedReviews = await ReviewSerializer
         .getDetailCollection(reviews)
 

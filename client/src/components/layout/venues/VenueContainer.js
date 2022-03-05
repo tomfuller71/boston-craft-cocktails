@@ -1,6 +1,6 @@
 import React from "react";
 
-import VenueTile from "./VenueTile";
+import VenueTile from "./VenueTile.js";
 
 const VenueContainer = ({ venues, handleCocktailSelect }) => {
 

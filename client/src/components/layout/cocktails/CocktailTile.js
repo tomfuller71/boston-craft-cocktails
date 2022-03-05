@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { Link, Redirect } from "react-router-dom"
 
-import ReviewIndex from "./ReviewIndex"
-import AddReviewForm from "./AddReviewForm"
-import Fetcher from "../../services/Fetcher.js"
-import RatingStars from "./RatingStars.js"
+import ReviewIndex from "../reviews/ReviewIndex.js"
+import AddReviewForm from "../reviews/AddReviewForm.js"
+import Fetcher from "../../../services/Fetcher.js"
+import RatingStars from "../RatingStars.js"
 
 const CocktailTile = (
   { id, name, image, ingredients, venueName, user, reviews, averageRating }
@@ -18,6 +18,7 @@ const CocktailTile = (
     
     const [addReviewFormErrors, setAddReviewFormErrors] = useState({})
     const [showReviewForm, setShowReviewForm] = useState(false)
+    const [editableReview, setEditableReview] = useState(null)
     const [redirectSignIn, setRedirectSignIn] = useState(false)
 
     const addReview = async (review) => {
@@ -37,8 +38,27 @@ const CocktailTile = (
       setAddReviewFormErrors(response.validationErrors)
     }
 
+    const editReview = (review) => {
+      console.log("put request")
+      return true
+    }
+
     const cancelReview = () => {
       setShowReviewForm(false)
+    }
+
+    const handleSubmitReview = (review) => {
+      if (review.id !== null) {
+        return editReview(review)
+      }
+      delete review.id
+      addReview(review)
+    }
+
+    const editReviewButtonClickHandler = (review) => {
+      console.log("at edit cb")
+      setEditableReview(review)
+      setShowReviewForm(true)
     }
 
     const addReviewButtonClickHandler = () => {
@@ -105,16 +125,23 @@ const CocktailTile = (
               </div>
             </div>
           </div>
-          <div className="cell small-4 medium-shrink callout cocktail-ingredients">
+          <div className="cell small-auto medium-shrink callout cocktail-ingredients">
             <h5>Ingredients:</h5>
             <ul className="ingredient-list vertical menu">{ingredientsList}</ul>
           </div>
           <div className="cell small-12 medium-auto cocktail-reviews">
-            {!showReviewForm && <ReviewIndex reviews={reviewsData.reviews} />}
+            {!showReviewForm
+              && <ReviewIndex
+                  reviews={reviewsData.reviews}
+                  user={user}
+                  editReviewButtonClickHandler={editReviewButtonClickHandler}
+                />
+            }
             {showReviewForm && (
               <AddReviewForm
                 userId={user.id}
-                addReview={addReview}
+                editableReview={editableReview}
+                handleSubmitReview={handleSubmitReview}
                 cancelReview={cancelReview}
                 errors={addReviewFormErrors}
               />

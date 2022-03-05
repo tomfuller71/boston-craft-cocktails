@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react"
 import { Redirect, withRouter, Link } from "react-router-dom"
 import startCase from "lodash.startcase"
 
-import ErrorList from "./ErrorList.js"
-import Fetcher from "../../services/Fetcher.js"
-import DropAndPreviewImage from "./DropAndPreviewImage.js"
-import IngredientSelector from "./IngredientSelector.js"
+import ErrorList from "../ErrorList.js"
+import Fetcher from "../../../services/Fetcher.js"
+import DropAndPreviewImage from "../DropAndPreviewImage.js"
+import IngredientSelector from "../ingredients/IngredientSelector.js"
 
 const AddCocktailForm = ({ user, match }) => {
   const venueId = match.params.venueId

@@ -1,11 +1,13 @@
 import React, { useState } from "react"
 
-import ErrorList from "./ErrorList.js"
+import ErrorList from "../ErrorList.js"
 
-const AddReviewForm = ({ addReview,cancelReview, errors }) => {
+const AddReviewForm = ({ handleSubmitReview, cancelReview, errors, editableReview }) => {
+
   const defaultInput = {
-    reviewText: "",
-    rating: ""
+    id: editableReview ? editableReview.id : null,
+    reviewText: editableReview ? editableReview.reviewText : "",
+    rating: editableReview ? editableReview.rating : ""
   }
 
   const [formInput, setFormInput] = useState(defaultInput)
@@ -22,10 +24,11 @@ const AddReviewForm = ({ addReview,cancelReview, errors }) => {
     event.preventDefault()
 
     const reviewData = {
+      id: formInput.id,
       reviewText: formInput.reviewText.trim(),
       rating: parseInt(formInput.rating)
     }
-    addReview(reviewData)
+    handleSubmitReview(reviewData)
   }
 
   const handleCancel = (event) => {
