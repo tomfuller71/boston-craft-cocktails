@@ -38,9 +38,40 @@ const CocktailTile = (
       setAddReviewFormErrors(response.validationErrors)
     }
 
+    const patchReview = async (id, patch, newAvg) => {
+      const response = await Fetcher.post(
+        `/api/v1/reviews/${id}`,
+        patch,
+        { method: "PATCH" }
+      )
+      if (response.ok) {
+        const updatedReview = response.data.review
+        const index = reviewsData.reviews.findIndex(e => e.id === id)
+        const otherReviews = [...reviewsData.reviews]
+        otherReviews.splice(index, 1)
+
+        setReviewsData({
+          reviews: [updatedReview, ...otherReviews],
+          averageRating: newAvg,
+          count: reviewsData.count
+        })
+      }
+    }
+
     const editReview = (review) => {
-      console.log("put request")
-      return true
+      const { isChanged, newAvg, patch } = getUpdateObject(
+        review,
+        editableReview,
+        reviewsData.averageRating,
+        reviewsData.count
+      )
+
+      if (isChanged) {
+        patchReview(review.id, patch, newAvg)
+      }
+
+      setEditableReview(null)
+      setShowReviewForm(false)
     }
 
     const cancelReview = () => {
@@ -153,3 +184,22 @@ const CocktailTile = (
 }
 
 export default CocktailTile
+
+function getUpdateObject(newReview, oldReview, oldAvgRating, count) {
+  const deltaRating = newReview.rating - oldReview.rating
+  const textChanged = newReview.reviewText !== oldReview.reviewText
+  const isChanged = deltaRating !== 0 || textChanged
+
+  let patch = {}
+  if (deltaRating !== 0) {
+    patch.rating = newReview.rating
+  }
+  
+  if (textChanged) {
+    patch.reviewText = newReview.reviewText
+  }
+
+  const newAvg = (oldAvgRating * count + deltaRating) / count
+
+  return { isChanged, newAvg, patch }
+}
