@@ -6,13 +6,13 @@ import getCurrentUser from "../services/getCurrentUser"
 import "../assets/scss/main.scss"
 import SignInForm from "./authentication/SignInForm"
 import TopBar from "./layout/TopBar"
-import CocktailIndex from "./layout/CocktailIndex.js"
-import IngredientShow from "./layout/IngredientShow.js"
+import CocktailIndex from "./layout/cocktails/CocktailIndex.js"
+import IngredientShow from "./layout/ingredients/IngredientShow.js"
 import SignUpForm from "./registration/SignUpForm.js"
 import VenueIndex from "./layout/venues/VenueIndex.js"
-import AddCocktailForm from "./layout/AddCocktailForm.js"
+import AddCocktailForm from "./layout/cocktails/AddCocktailForm.js"
 import AuthenticatedRoute from "./authentication/AuthenticatedRoute.js"
-import CocktailShow from "./layout/CocktailShow.js"
+import CocktailShow from "./layout/cocktails/CocktailShow.js"
 
 const App = (props) => {
 	const [currentUser, setCurrentUser] = useState(null)

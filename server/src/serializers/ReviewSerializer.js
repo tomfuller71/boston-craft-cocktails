@@ -1,5 +1,6 @@
 import allow from "./service/allow.js"
 import { Review } from "../models/index.js"
+import DateConverter from "./service/DateConverter.js"
 
 class ReviewSerializer {
     static getSummary(review) {
@@ -11,7 +12,8 @@ class ReviewSerializer {
 
         return {
             ...this.getSummary(review),
-            userName: user.name
+            userName: user.name,
+            date: DateConverter.displayDate(review.updatedAt)
         }
     }
 

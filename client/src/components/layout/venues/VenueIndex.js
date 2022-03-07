@@ -4,15 +4,14 @@ import Fetcher from "../../../services/Fetcher.js"
 import VenueMap from "./VenueMap.js"
 import VenueContainer from "./VenueContainer.js"
 import YelpVenueDropDown from "./YelpVenueDropDown.js"
-import CocktailSearchSelector from "../CocktailSearchSelector.js"
-import CocktailTile from "../CocktailTile.js"
+import CocktailSearchSelector from "../cocktails/CocktailSearchSelector.js"
+import CocktailTile from "../cocktails/CocktailTile.js"
 
 const VenueIndex = ({ user }) => {
   const [venues, setVenues] = useState([])
   const [venueMap, setVenueMap] = useState(getMapDefaults())
   const [selectedVenue, setSelectedVenue] = useState(null)
   const [filteredVenues, setFilteredVenues] = useState([])
-  const [yelpVenues, setYelpVenues] = useState([])
   const [selectedCocktail, setSelectedCocktail] = useState(null)
 
   const getVenues = async () => {
@@ -26,18 +25,9 @@ const VenueIndex = ({ user }) => {
     }
   }
 
-  const getYelpVenues = async () => {
-    const { center, radius } = venueMap
-    const url = `/api/v1/yelpVenues/?lat=${center.lat}&lng=${center.lng}&radius=${Math.round(radius)}`
-
-    const response = await Fetcher.get(url)
-    if (response.ok) {
-      setYelpVenues(response.data.venues)
-    }
-  }
-
   const addNewVenue =(newVenue) => {
-    setVenues([...venues, newVenue])
+    setVenues([newVenue, ...venues])
+    setFilteredVenues([newVenue, ...filteredVenues])
   }
 
   const updateMap = (newMap) => {
@@ -45,9 +35,6 @@ const VenueIndex = ({ user }) => {
     const chgCenter = Math.abs(newMap.center.lat - venueMap.center.lat)
                     + Math.abs(newMap.center.lng - venueMap.center.lng)
 
-    if (chgCenter > 0.005 || chgRadius > 50) {
-      getYelpVenues()
-    }
     const filtered = filterVenues(venues, newMap.bounds)
     setFilteredVenues(filtered)
     setVenueMap(newMap)
@@ -58,6 +45,10 @@ const VenueIndex = ({ user }) => {
     if (response.ok) {
       setSelectedCocktail(response.data.cocktail)
     }
+  }
+
+  const handleAddVenueSelectorClick = () => {
+    getYelpVenues(venueMap)
   }
 
   const handleCocktailSelect = (id) => {
@@ -83,8 +74,9 @@ const VenueIndex = ({ user }) => {
               <h5>Add new cocktail place</h5>
               <YelpVenueDropDown
                 user={user}
-                yelpVenues={yelpVenues}
+                map={venueMap}
                 addNewVenue={addNewVenue}
+                handleClick={handleAddVenueSelectorClick}
               />
             </div>
           </div>

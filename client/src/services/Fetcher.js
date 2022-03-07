@@ -9,8 +9,9 @@ class Fetcher {
   /**
    *
    * @param {string} route The domain relative url of the post route
-   * @param {object} body The date object to be stringified in the fetch request
+   * @param {object} body The object to be stringified in the fetch request
    * @param {object=} options Options for configuring the post request:
+   * - `method`: default `"POST"`
    * - `validationStatus`: the validation errors status code, default 422
    * - `validationErrorParser`: parsing function used on `validationErrors' - defaults to parse "objection" validation errors
    * - bodyJSON: header Content-Type - default true ("application/json")
@@ -24,6 +25,7 @@ class Fetcher {
     route,
     body,
     { 
+      method = "POST",
       validationStatus = 422,
       validationErrorParser = this.parseObjectionValidationErrors,
       bodyJSON = true,
@@ -47,7 +49,7 @@ class Fetcher {
       
     try {
       const fetchOptions = {
-        method: "POST",
+        method,
         headers: new Headers(headers),
         body: bodyJSON ? JSON.stringify(body) : body,
       }

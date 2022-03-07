@@ -6,6 +6,9 @@
 .map-size {
   width: 100%;
 }
+.venue-map-container, .venue-list-container {
+  min-width: 450px;
+}
 
 .venues-overflow {
   overflow: hidden;
@@ -68,11 +71,10 @@ button:hover.link-button {
   align-items: center;
 
   .button {
-    margin-left: 2rem;
+    margin-left: 1.5rem;
   }
-
   select {
-    min-width: 30rem;
+    min-width: 18rem;
   }
 }
 

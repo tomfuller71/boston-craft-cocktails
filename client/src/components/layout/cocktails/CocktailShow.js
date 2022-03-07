@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { Link, Redirect, withRouter } from "react-router-dom"
 
-import Fetcher from "../../services/Fetcher.js"
-import ReviewIndex from "./ReviewIndex"
-import AddReviewForm from "./AddReviewForm"
-import RatingStars from "./RatingStars.js"
+import Fetcher from "../../../services/Fetcher.js"
+import ReviewIndex from "../reviews/ReviewIndex.js"
+import AddReviewForm from "../reviews/AddReviewForm.js"
+import RatingStars from "../RatingStars.js"
 
 const CocktailShow = ({ user, match }) => {
   const { id } = match.params

@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Redirect } from "react-router-dom"
 
 import Fetcher from "../../../services/Fetcher.js"
 import ErrorList from "../ErrorList.js"
 
-const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
+const YelpVenueDropDown = ({ map, addNewVenue, user }) => {
+  const [yelpVenues, setYelpVenues] = useState([])
   const [selectedId, setSelectedId] = useState("")
   const [errors, setErrors] = useState([])
   const [shouldRedirect, setShouldRedirect] = useState(false)
@@ -13,6 +14,24 @@ const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
     setSelectedId(event.target.value)
     setErrors([])
   }
+
+  const getYelpVenues = async () => {
+    const { center, radius } = map
+    const url = `/api/v1/yelpVenues/?lat=${center.lat}&lng=${center.lng}&radius=${Math.round(radius)}`
+
+    const response = await Fetcher.get(url)
+    if (response.ok) {
+      setYelpVenues(response.data.venues)
+    }
+  }
+
+  const handleClick = () => {
+    getYelpVenues()
+  }
+
+  useEffect(() => {
+    getYelpVenues()
+  }, [])
 
   const getNewVenue = async () => {
     const selectedVenue = yelpVenues.find(venue => venue.id === selectedId)
@@ -50,7 +69,7 @@ const YelpVenueDropDown = ({ yelpVenues, addNewVenue, user}) => {
       <form onSubmit={handleSubmit}>
         <div className="yelp-add-buttons">
           <label>
-            <select value={selectedId} onChange={handleSelect}>
+            <select value={selectedId} onChange={handleSelect} onClick={handleClick}>
               <option key="emptyValue" value={""}>
                 Select from nearby places
               </option>
