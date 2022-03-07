@@ -18,8 +18,17 @@ const CocktailTile = (
     
     const [addReviewFormErrors, setAddReviewFormErrors] = useState({})
     const [showReviewForm, setShowReviewForm] = useState(false)
-    const [editableReview, setEditableReview] = useState(null)
+    const [editingReview, setEditingReview] = useState(null)
     const [redirectSignIn, setRedirectSignIn] = useState(false)
+
+
+    useEffect(() => {
+      setReviewsData({
+        reviews,
+        averageRating,
+        count: reviews.length
+      })
+    }, [reviews])
 
     const addReview = async (review) => {
       const response = await Fetcher.post(`/api/v1/cocktails/${id}/reviews`, review)
@@ -44,6 +53,7 @@ const CocktailTile = (
         patch,
         { method: "PATCH" }
       )
+
       if (response.ok) {
         const updatedReview = response.data.review
         const index = reviewsData.reviews.findIndex(e => e.id === id)
@@ -59,23 +69,34 @@ const CocktailTile = (
     }
 
     const editReview = (review) => {
-      const { isChanged, newAvg, patch } = getUpdateObject(
+      const { isChanged, newAvg, patch } = getEditReviewUpdate(
         review,
-        editableReview,
-        reviewsData.averageRating,
-        reviewsData.count
+        editingReview,
+        reviewsData
       )
 
       if (isChanged) {
         patchReview(review.id, patch, newAvg)
       }
 
-      setEditableReview(null)
+      setEditingReview(null)
       setShowReviewForm(false)
     }
 
     const cancelReview = () => {
       setShowReviewForm(false)
+    }
+
+    const deleteReview = async (id) => {
+      const newReviewData = getDeleteReviewUpdate(reviewsData, id)
+      if (newReviewData) {
+        setReviewsData(newReviewData)
+        await fetch(`/api/v1/reviews/${id}`, { method: "DELETE" })
+      }
+    }
+
+    const handleDeleteClick = (id) => {
+      deleteReview(id)
     }
 
     const handleSubmitReview = (review) => {
@@ -87,8 +108,7 @@ const CocktailTile = (
     }
 
     const editReviewButtonClickHandler = (review) => {
-      console.log("at edit cb")
-      setEditableReview(review)
+      setEditingReview(review)
       setShowReviewForm(true)
     }
 
@@ -99,14 +119,6 @@ const CocktailTile = (
       setShowReviewForm(true)
     }
 
-    useEffect(() => {
-      setReviewsData({
-        reviews,
-        averageRating,
-        count: reviews.length
-      })
-
-    }, [reviews])
 
     const ingredientsList = ingredients.map((ingredient) => {
       return (
@@ -166,12 +178,13 @@ const CocktailTile = (
                   reviews={reviewsData.reviews}
                   user={user}
                   editReviewButtonClickHandler={editReviewButtonClickHandler}
+                  deleteReviewHandler = {handleDeleteClick}
                 />
             }
             {showReviewForm && (
               <AddReviewForm
                 userId={user.id}
-                editableReview={editableReview}
+                editableReview={editingReview}
                 handleSubmitReview={handleSubmitReview}
                 cancelReview={cancelReview}
                 errors={addReviewFormErrors}
@@ -185,21 +198,46 @@ const CocktailTile = (
 
 export default CocktailTile
 
-function getUpdateObject(newReview, oldReview, oldAvgRating, count) {
-  const deltaRating = newReview.rating - oldReview.rating
-  const textChanged = newReview.reviewText !== oldReview.reviewText
+function getEditReviewUpdate(review, editingReview, reviewsData) {
+  const { averageRating: oldAvgRating, count } = reviewsData
+  const deltaRating = review.rating - editingReview.rating
+  const textChanged = review.reviewText !== editingReview.reviewText
   const isChanged = deltaRating !== 0 || textChanged
 
   let patch = {}
   if (deltaRating !== 0) {
-    patch.rating = newReview.rating
+    patch.rating = review.rating
   }
   
   if (textChanged) {
-    patch.reviewText = newReview.reviewText
+    patch.reviewText = review.reviewText
   }
 
   const newAvg = (oldAvgRating * count + deltaRating) / count
 
   return { isChanged, newAvg, patch }
+}
+
+function getDeleteReviewUpdate(oldData, id) {
+  const {
+    reviews: oldReviews,
+    averageRating: oldAvgRating,
+    count: oldCount
+  } = oldData
+
+  const index = oldReviews.findIndex(e => e.id === id)
+  if (index > -1) {
+    const rating = oldReviews[index].rating
+    const newCount = oldCount - 1
+    const newAvg = ((oldAvgRating * oldCount) - rating ) / newCount
+    const newReviews = [...oldReviews]
+    newReviews.splice(index, 1)
+
+    return {
+      reviews: newReviews,
+      averageRating: newAvg,
+      count: newCount
+    }
+  }
+  return null
 }
