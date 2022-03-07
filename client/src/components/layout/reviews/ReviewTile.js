@@ -5,7 +5,7 @@ import { faPenToSquare } from "@fortawesome/free-regular-svg-icons"
 
 import RatingStars from "../RatingStars.js"
 
-const ReviewTile = ({ review, isEditable, editReview}) => {
+const ReviewTile = ({ review, isEditable, editReview, deleteReview }) => {
 
   const { reviewText, rating, userName, date } = review
 
@@ -15,7 +15,8 @@ const ReviewTile = ({ review, isEditable, editReview}) => {
   }
 
   const handleDeleteClick = (event) => {
-    return true
+    event.preventDefault()
+    deleteReview(review.id)
   }
 
   return (
