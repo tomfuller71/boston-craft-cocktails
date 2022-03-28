@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import GoogleMapReact, { fitBounds } from "google-map-react"
+import GoogleMapReact from "google-map-react"
 import haversine from 'haversine-distance'
 
 import GoogleMapStyle from "../../../assets/GoogleMapStyle.js"
@@ -22,7 +22,7 @@ const VenueMap = ({ venues, updateMap, selectedVenue, setSelectedVenue }) => {
     }
   }
 
-  const handleMapChange =( newMap ) => {
+  const handleMapChange = (newMap) => {
     const { center, bounds } = newMap
     const radius = haversine(center, bounds.nw) / 1.81
     updateMap({ bounds, radius, center })
@@ -47,7 +47,7 @@ const VenueMap = ({ venues, updateMap, selectedVenue, setSelectedVenue }) => {
       rating={rating}
     />)
   })
-  //style={map.size}
+  
   return (
     <div className="map-size">
       <GoogleMapReact
